@@ -22,6 +22,9 @@ namespace FourWalledCubicle.HEXClassifier
         {
             string text = line.GetText();
 
+            if (text.Length < 1)
+                yield break;
+
             if (text[0] != ':')
                 yield break;
 
