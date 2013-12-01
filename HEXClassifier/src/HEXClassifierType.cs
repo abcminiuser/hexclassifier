@@ -15,7 +15,7 @@ namespace FourWalledCubicle.HEXClassifier
         public HEXStartCodeFormat()
         {
             this.DisplayName = "HEX Start Code Definition";
-            this.ForegroundColor = Colors.Olive;
+            this.ForegroundColor = Colors.Gray;
         }
     }
 
@@ -85,7 +85,7 @@ namespace FourWalledCubicle.HEXClassifier
         public HEXChecksumFormat()
         {
             this.DisplayName = "HEX Checksum Definition";
-            this.ForegroundColor = Colors.Gray;
+            this.ForegroundColor = Colors.Olive;
         }
     }
 
