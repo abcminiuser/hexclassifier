@@ -14,6 +14,7 @@ namespace FourWalledCubicle.HEXClassifier
             { HEXParser.HEXEntryTypes.RECORD_TYPE, "hex.recordtype" },
             { HEXParser.HEXEntryTypes.DATA, "hex.data" },
             { HEXParser.HEXEntryTypes.CHECKSUM, "hex.checksum" },
+            { HEXParser.HEXEntryTypes.CHECKSUM_BAD, "hex.checksum.bad" },
         };
 
         private readonly ITextBuffer mTextBuffer;

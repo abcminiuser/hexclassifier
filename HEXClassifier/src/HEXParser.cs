@@ -16,6 +16,7 @@ namespace FourWalledCubicle.HEXClassifier
             RECORD_TYPE,
             DATA,
             CHECKSUM,
+            CHECKSUM_BAD,
         };
 
         public static IEnumerable<Tuple<HEXEntryTypes, SnapshotSpan>> Parse(ITextSnapshotLine line)
@@ -61,8 +62,33 @@ namespace FourWalledCubicle.HEXClassifier
             if (text.Length < (11 + byteCount))
                 yield break;
 
-            yield return new Tuple<HEXEntryTypes, SnapshotSpan>(
-                                 HEXEntryTypes.CHECKSUM, new SnapshotSpan(line.Snapshot, line.Start + 9 + byteCount, 2));
+
+            int calculatedChecksum = CalculateChecksum(text);
+            int fileChecksum = -1;
+            int.TryParse(text.Substring(text.Length - 2, 2), System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out fileChecksum);
+
+            if (fileChecksum == calculatedChecksum)
+                yield return new Tuple<HEXEntryTypes, SnapshotSpan>(
+                                     HEXEntryTypes.CHECKSUM, new SnapshotSpan(line.Snapshot, line.Start + 9 + byteCount, 2));
+            else
+                yield return new Tuple<HEXEntryTypes, SnapshotSpan>(
+                                     HEXEntryTypes.CHECKSUM_BAD, new SnapshotSpan(line.Snapshot, line.Start + 9 + byteCount, 2));
+        }
+
+        private static int CalculateChecksum(string textLine)
+        {
+            string checksumText = textLine.Substring(1, textLine.Length - 3);
+            if (checksumText.Length % 2 != 0)
+                return -1;
+            int temp = 0;
+            for (int i = 0; i < checksumText.Length; i += 2)
+            {
+                int bytePair = 0;
+                if (int.TryParse(checksumText.Substring(i, 2), System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out bytePair) == false)
+                    return -1;
+                temp += bytePair;
+            }
+            return (256 - (temp & 0xFF) ) & 0xFF;
         }
     }
 }

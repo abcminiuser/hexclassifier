@@ -89,6 +89,21 @@ namespace FourWalledCubicle.HEXClassifier
         }
     }
 
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "hex.checksum.bad")]
+    [Name("hex.checksum.bad")]
+    [UserVisible(true)]
+    [Order(After = Priority.Default)]
+    internal sealed class HEXBadChecksumFormat : ClassificationFormatDefinition
+    {
+        public HEXBadChecksumFormat()
+        {
+            this.DisplayName = "HEX Bad Checksum Definition";
+            this.ForegroundColor = Colors.Olive;
+            this.BackgroundColor = Colors.Red;
+        }
+    }
+
     internal static class HEXClassificationType
     {
         [Export(typeof(ClassificationTypeDefinition))]
@@ -114,5 +129,9 @@ namespace FourWalledCubicle.HEXClassifier
         [Export(typeof(ClassificationTypeDefinition))]
         [Name("hex.checksum")]
         internal static ClassificationTypeDefinition HEXChecksumDefinition { get; set; }
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [Name("hex.checksum.bad")]
+        internal static ClassificationTypeDefinition HEXBadChecksumDefinition { get; set; }
     }
 }
