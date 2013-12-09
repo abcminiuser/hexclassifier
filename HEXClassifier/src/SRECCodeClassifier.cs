@@ -5,16 +5,16 @@ using Microsoft.VisualStudio.Text.Classification;
 
 namespace FourWalledCubicle.HEXClassifier
 {
-    internal sealed class HEXCodeClassifier : IClassifier
+    internal sealed class SRECCodeClassifier : IClassifier
     {
-        private static readonly Dictionary<HEXParser.HEXEntryTypes, string> mClassifierTypeNames = new Dictionary<HEXParser.HEXEntryTypes, string>() {
-            { HEXParser.HEXEntryTypes.START_CODE, "hex.startcode" },
-            { HEXParser.HEXEntryTypes.BYTE_COUNT, "hex.bytecount" },
-            { HEXParser.HEXEntryTypes.ADDRESS, "hex.address" },
-            { HEXParser.HEXEntryTypes.RECORD_TYPE, "hex.recordtype" },
-            { HEXParser.HEXEntryTypes.DATA, "hex.data" },
-            { HEXParser.HEXEntryTypes.CHECKSUM, "hex.checksum" },
-            { HEXParser.HEXEntryTypes.CHECKSUM_BAD, "hex.checksum.bad" },
+        private static readonly Dictionary<SRECParser.SRECEntryTypes, string> mClassifierTypeNames = new Dictionary<SRECParser.SRECEntryTypes, string>() {
+            { SRECParser.SRECEntryTypes.START_CODE, "srec.startcode" },
+            { SRECParser.SRECEntryTypes.BYTE_COUNT, "srec.bytecount" },
+            { SRECParser.SRECEntryTypes.ADDRESS, "srec.address" },
+            { SRECParser.SRECEntryTypes.RECORD_TYPE, "srec.recordtype" },
+            { SRECParser.SRECEntryTypes.DATA, "srec.data" },
+            { SRECParser.SRECEntryTypes.CHECKSUM, "srec.checksum" },
+            { SRECParser.SRECEntryTypes.CHECKSUM_BAD, "srec.checksum.bad" },
         };
 
         private readonly ITextBuffer mTextBuffer;
@@ -25,7 +25,7 @@ namespace FourWalledCubicle.HEXClassifier
         public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
 #pragma warning restore 0067
 
-        public HEXCodeClassifier(ITextBuffer buffer, IClassificationTypeRegistryService classifierTypeRegistry)
+        public SRECCodeClassifier(ITextBuffer buffer, IClassificationTypeRegistryService classifierTypeRegistry)
         {
             mTextBuffer = buffer;
             mClassificationTypeRegistry = classifierTypeRegistry;
@@ -40,7 +40,7 @@ namespace FourWalledCubicle.HEXClassifier
 
             ITextSnapshotLine line = span.Start.GetContainingLine();
 
-            foreach (Tuple<HEXParser.HEXEntryTypes, SnapshotSpan> segment in HEXParser.Parse(line))
+            foreach (Tuple<SRECParser.SRECEntryTypes, SnapshotSpan> segment in SRECParser.Parse(line))
             {
                 IClassificationType classificationType = mClassificationTypeRegistry.GetClassificationType(mClassifierTypeNames[segment.Item1]);
                 classifications.Add(new ClassificationSpan(segment.Item2, classificationType));

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FourWalledCubicle.HEXClassifier</RootNamespace>
     <AssemblyName>HEXClassifier</AssemblyName>
-    <SignAssembly>True</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
@@ -23,7 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CopyVsixExtensionFiles>True</CopyVsixExtensionFiles>
-    <CopyVsixExtensionLocation>C:\Users\Dean\AppData\Local\Atmel\AtmelStudio\6.1_Exp\Extensions\Dean Camera\HEXClassifier</CopyVsixExtensionLocation>
+    <CopyVsixExtensionLocation>C:\Users\Morten\AppData\Local\Atmel\AtmelStudio\6.1\Extensions\Dean Camera\HEXClassifier</CopyVsixExtensionLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -136,6 +136,11 @@
     <Compile Include="src\HEXCodeClassifierProvider.cs" />
     <Compile Include="src\HEXContentDefinition.cs" />
     <Compile Include="src\HEXParser.cs" />
+    <Compile Include="src\SRECClassifierTypes.cs" />
+    <Compile Include="src\SRECCodeClassifier.cs" />
+    <Compile Include="src\SRECCodeClassifierProvider.cs" />
+    <Compile Include="src\SRECContentDefinition.cs" />
+    <Compile Include="src\SRECParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
