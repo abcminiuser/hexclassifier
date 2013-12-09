@@ -14,6 +14,7 @@ namespace FourWalledCubicle.HEXClassifier
             { SRECParser.SRECEntryTypes.RECORD_TYPE, "srec.recordtype" },
             { SRECParser.SRECEntryTypes.DATA, "srec.data" },
             { SRECParser.SRECEntryTypes.CHECKSUM, "srec.checksum" },
+            { SRECParser.SRECEntryTypes.CHECKSUM_BAD, "srec.checksum.bad" },
         };
 
         private readonly ITextBuffer mTextBuffer;

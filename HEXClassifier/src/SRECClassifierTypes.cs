@@ -89,7 +89,22 @@ namespace FourWalledCubicle.HEXClassifier
         }
     }
 
-    internal static class HEXClassificationType
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "srec.checksum.bad")]
+    [Name("srec.checksum.bad")]
+    [UserVisible(true)]
+    [Order(After = Priority.Default)]
+    internal sealed class SRECBadChecksumFormat : ClassificationFormatDefinition
+    {
+        public SRECBadChecksumFormat()
+        {
+            this.DisplayName = "SREC Bad Checksum Definition";
+            this.ForegroundColor = Colors.Olive;
+            this.BackgroundColor = Colors.Red;
+        }
+    }
+
+    internal static class SRECClassificationType
     {
         [Export(typeof(ClassificationTypeDefinition))]
         [Name("srec.startcode")]
@@ -114,5 +129,9 @@ namespace FourWalledCubicle.HEXClassifier
         [Export(typeof(ClassificationTypeDefinition))]
         [Name("srec.checksum")]
         internal static ClassificationTypeDefinition SRECChecksumDefinition { get; set; }
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [Name("srec.checksum.bad")]
+        internal static ClassificationTypeDefinition SRECBadChecksumDefinition { get; set; }
     }
 }

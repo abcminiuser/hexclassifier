@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace FourWalledCubicle.HEXClassifier
 {
-    internal static class HEXContentDefinition
+    internal static class SRECContentDefinition
     {
         [Export]
         [Name("srec")]
