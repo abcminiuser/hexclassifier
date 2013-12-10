@@ -62,13 +62,13 @@ namespace FourWalledCubicle.HEXClassifier
             if (text.Length < (11 + byteCount))
                 yield break;
 
-
             int calculatedChecksum = CalculateChecksum(text);
             int fileChecksum = -1;
             int.TryParse(text.Substring(text.Length - 2, 2), System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out fileChecksum);
 
             yield return new Tuple<HEXEntryTypes, SnapshotSpan>(
-                                    (fileChecksum == calculatedChecksum) ? HEXEntryTypes.CHECKSUM : HEXEntryTypes.CHECKSUM_BAD, new SnapshotSpan(line.Snapshot, line.Start + 9 + byteCount, 2));
+                                    (fileChecksum == calculatedChecksum) ? HEXEntryTypes.CHECKSUM : HEXEntryTypes.CHECKSUM_BAD,
+                                    new SnapshotSpan(line.Snapshot, line.Start + 9 + byteCount, 2));
         }
 
         private static int CalculateChecksum(string textLine)

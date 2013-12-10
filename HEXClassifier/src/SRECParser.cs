@@ -38,7 +38,7 @@ namespace FourWalledCubicle.HEXClassifier
             if (int.TryParse(text.Substring(1, 1), System.Globalization.NumberStyles.Integer, CultureInfo.CurrentCulture, out recordType) == false)
                 yield break;
             yield return new Tuple<SRECEntryTypes, SnapshotSpan>(
-                SRECEntryTypes.RECORD_TYPE, new SnapshotSpan(line.Snapshot, line.Start + 1, 1));
+                                SRECEntryTypes.RECORD_TYPE, new SnapshotSpan(line.Snapshot, line.Start + 1, 1));
 
             if (text.Length < 5)
                 yield break;
@@ -52,7 +52,7 @@ namespace FourWalledCubicle.HEXClassifier
                 yield break;
 
             yield return new Tuple<SRECEntryTypes, SnapshotSpan>(
-                SRECEntryTypes.BYTE_COUNT, new SnapshotSpan(line.Snapshot, line.Start + 2, 2));
+                                SRECEntryTypes.BYTE_COUNT, new SnapshotSpan(line.Snapshot, line.Start + 2, 2));
 
             int addressBytes = 0;
             switch (recordType)
@@ -84,16 +84,17 @@ namespace FourWalledCubicle.HEXClassifier
                 yield break;
 
             yield return new Tuple<SRECEntryTypes, SnapshotSpan>(
-                SRECEntryTypes.ADDRESS, new SnapshotSpan(line.Snapshot, line.Start + 4, addressBytes));
+                                SRECEntryTypes.ADDRESS, new SnapshotSpan(line.Snapshot, line.Start + 4, addressBytes));
 
             // Check if we expect data in this record
             if (new List<int> { 0, 1, 2, 3 }.Contains(recordType))
             {
                 int dataLength = (byteCount * 2) - addressBytes - 2;
-                if (text.Length < 5 + dataLength)
+                if (text.Length < (5 + dataLength))
                     yield break;
+
                 yield return new Tuple<SRECEntryTypes, SnapshotSpan>(
-                    SRECEntryTypes.DATA, new SnapshotSpan(line.Snapshot, line.Start + 4 + addressBytes, dataLength));
+                                    SRECEntryTypes.DATA, new SnapshotSpan(line.Snapshot, line.Start + 4 + addressBytes, dataLength));
             }
 
             int calculatedChecksum = CalculateChecksum(text);
@@ -101,7 +102,8 @@ namespace FourWalledCubicle.HEXClassifier
             int.TryParse(text.Substring(text.Length - 2, 2), System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out fileChecksum);
             
             yield return new Tuple<SRECEntryTypes, SnapshotSpan>(
-                (fileChecksum == calculatedChecksum) ? SRECEntryTypes.CHECKSUM : SRECEntryTypes.CHECKSUM_BAD, new SnapshotSpan(line.Snapshot, line.End - 2, 2));
+                                (fileChecksum == calculatedChecksum) ? SRECEntryTypes.CHECKSUM : SRECEntryTypes.CHECKSUM_BAD,
+                                new SnapshotSpan(line.Snapshot, line.End - 2, 2));
         }
 
         private static int CalculateChecksum(string textLine)
