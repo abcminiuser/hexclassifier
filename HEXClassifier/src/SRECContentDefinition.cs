@@ -14,6 +14,5 @@ namespace FourWalledCubicle.HEXClassifier
         [ContentType("srec")]
         [FileExtension(".srec")]
         internal static FileExtensionToContentTypeDefinition srecContentTypeDefinitionFileExtension { get; set; }
-
     }
 }

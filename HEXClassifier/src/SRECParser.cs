@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.Text;
 using System.Globalization;
+using Microsoft.VisualStudio.Text;
 
 namespace FourWalledCubicle.HEXClassifier
 {
@@ -101,12 +100,8 @@ namespace FourWalledCubicle.HEXClassifier
             int fileChecksum = -1;
             int.TryParse(text.Substring(text.Length - 2, 2), System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out fileChecksum);
             
-            if (fileChecksum == calculatedChecksum)
-                yield return new Tuple<SRECEntryTypes, SnapshotSpan>(
-                    SRECEntryTypes.CHECKSUM, new SnapshotSpan(line.Snapshot, line.End - 2, 2));
-            else
-                yield return new Tuple<SRECEntryTypes, SnapshotSpan>(
-                    SRECEntryTypes.CHECKSUM_BAD, new SnapshotSpan(line.Snapshot, line.End - 2, 2));
+            yield return new Tuple<SRECEntryTypes, SnapshotSpan>(
+                (fileChecksum == calculatedChecksum) ? SRECEntryTypes.CHECKSUM : SRECEntryTypes.CHECKSUM_BAD, new SnapshotSpan(line.Snapshot, line.End - 2, 2));
         }
 
         private static int CalculateChecksum(string textLine)
@@ -114,6 +109,7 @@ namespace FourWalledCubicle.HEXClassifier
             string checksumText = textLine.Substring(2, textLine.Length - 4);
             if (checksumText.Length % 2 != 0)
                 return -1;
+
             int temp = 0;
             for (int i = 0; i < checksumText.Length; i += 2)
             {
@@ -122,6 +118,7 @@ namespace FourWalledCubicle.HEXClassifier
                     return -1;
                 temp += bytePair;
             }
+
             return (~(temp & 0xFF)) & 0xFF;
         }
     }

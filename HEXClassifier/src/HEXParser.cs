@@ -67,19 +67,17 @@ namespace FourWalledCubicle.HEXClassifier
             int fileChecksum = -1;
             int.TryParse(text.Substring(text.Length - 2, 2), System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out fileChecksum);
 
-            if (fileChecksum == calculatedChecksum)
-                yield return new Tuple<HEXEntryTypes, SnapshotSpan>(
-                                     HEXEntryTypes.CHECKSUM, new SnapshotSpan(line.Snapshot, line.Start + 9 + byteCount, 2));
-            else
-                yield return new Tuple<HEXEntryTypes, SnapshotSpan>(
-                                     HEXEntryTypes.CHECKSUM_BAD, new SnapshotSpan(line.Snapshot, line.Start + 9 + byteCount, 2));
+            yield return new Tuple<HEXEntryTypes, SnapshotSpan>(
+                                    (fileChecksum == calculatedChecksum) ? HEXEntryTypes.CHECKSUM : HEXEntryTypes.CHECKSUM_BAD, new SnapshotSpan(line.Snapshot, line.Start + 9 + byteCount, 2));
         }
 
         private static int CalculateChecksum(string textLine)
         {
             string checksumText = textLine.Substring(1, textLine.Length - 3);
+
             if (checksumText.Length % 2 != 0)
                 return -1;
+
             int temp = 0;
             for (int i = 0; i < checksumText.Length; i += 2)
             {
@@ -88,6 +86,7 @@ namespace FourWalledCubicle.HEXClassifier
                     return -1;
                 temp += bytePair;
             }
+
             return (256 - (temp & 0xFF) ) & 0xFF;
         }
     }
