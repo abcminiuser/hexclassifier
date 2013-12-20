@@ -56,6 +56,7 @@ namespace FourWalledCubicle.HEXClassifier.src
 
         #region IWpfTextViewMargin Members
 
+        // This overrides content of margin. Magic happens here!
         public FrameworkElement VisualElement
         {
             get
