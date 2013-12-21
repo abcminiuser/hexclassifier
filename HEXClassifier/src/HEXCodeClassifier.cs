@@ -7,14 +7,14 @@ namespace FourWalledCubicle.HEXClassifier
 {
     internal sealed class HEXCodeClassifier : IClassifier
     {
-        private static readonly Dictionary<HEXParser.HEXEntryTypes, string> mClassifierTypeNames = new Dictionary<HEXParser.HEXEntryTypes, string>() {
-            { HEXParser.HEXEntryTypes.START_CODE, "hex.startcode" },
-            { HEXParser.HEXEntryTypes.BYTE_COUNT, "hex.bytecount" },
-            { HEXParser.HEXEntryTypes.ADDRESS, "hex.address" },
-            { HEXParser.HEXEntryTypes.RECORD_TYPE, "hex.recordtype" },
-            { HEXParser.HEXEntryTypes.DATA, "hex.data" },
-            { HEXParser.HEXEntryTypes.CHECKSUM, "hex.checksum" },
-            { HEXParser.HEXEntryTypes.CHECKSUM_BAD, "hex.checksum.bad" },
+        private static readonly Dictionary<TokenEntryTypes, string> mClassifierTypeNames = new Dictionary<TokenEntryTypes, string>() {
+            { TokenEntryTypes.START_CODE, "hex.startcode" },
+            { TokenEntryTypes.BYTE_COUNT, "hex.bytecount" },
+            { TokenEntryTypes.ADDRESS, "hex.address" },
+            { TokenEntryTypes.RECORD_TYPE, "hex.recordtype" },
+            { TokenEntryTypes.DATA, "hex.data" },
+            { TokenEntryTypes.CHECKSUM, "hex.checksum" },
+            { TokenEntryTypes.CHECKSUM_BAD, "hex.checksum.bad" },
         };
 
         private readonly ITextBuffer mTextBuffer;
@@ -40,7 +40,7 @@ namespace FourWalledCubicle.HEXClassifier
 
             ITextSnapshotLine line = span.Start.GetContainingLine();
 
-            foreach (Tuple<HEXParser.HEXEntryTypes, SnapshotSpan> segment in HEXParser.Parse(line))
+            foreach (Tuple<TokenEntryTypes, SnapshotSpan> segment in HEXParser.Parse(line))
             {
                 IClassificationType classificationType = mClassificationTypeRegistry.GetClassificationType(mClassifierTypeNames[segment.Item1]);
                 classifications.Add(new ClassificationSpan(segment.Item2, classificationType));

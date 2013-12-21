@@ -7,18 +7,7 @@ namespace FourWalledCubicle.HEXClassifier
 {
     internal abstract class SRECParser
     {
-        public enum SRECEntryTypes
-        {
-            START_CODE,
-            RECORD_TYPE,
-            BYTE_COUNT,
-            ADDRESS,
-            DATA,
-            CHECKSUM,
-            CHECKSUM_BAD
-        };
-
-        public static IEnumerable<Tuple<SRECEntryTypes, SnapshotSpan>> Parse(ITextSnapshotLine line)
+        public static IEnumerable<Tuple<TokenEntryTypes, SnapshotSpan>> Parse(ITextSnapshotLine line)
         {
             string text = line.GetText();
 
@@ -28,8 +17,8 @@ namespace FourWalledCubicle.HEXClassifier
             if (text[0] != 'S')
                 yield break;
 
-            yield return new Tuple<SRECEntryTypes, SnapshotSpan>(
-                                 SRECEntryTypes.START_CODE, new SnapshotSpan(line.Snapshot, line.Start, 1));
+            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
+                                 TokenEntryTypes.START_CODE, new SnapshotSpan(line.Snapshot, line.Start, 1));
 
             if (text.Length < 3)
                 yield break;
@@ -37,8 +26,8 @@ namespace FourWalledCubicle.HEXClassifier
             int recordType = 0;
             if (int.TryParse(text.Substring(1, 1), System.Globalization.NumberStyles.Integer, CultureInfo.CurrentCulture, out recordType) == false)
                 yield break;
-            yield return new Tuple<SRECEntryTypes, SnapshotSpan>(
-                                SRECEntryTypes.RECORD_TYPE, new SnapshotSpan(line.Snapshot, line.Start + 1, 1));
+            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
+                                TokenEntryTypes.RECORD_TYPE, new SnapshotSpan(line.Snapshot, line.Start + 1, 1));
 
             if (text.Length < 5)
                 yield break;
@@ -51,8 +40,8 @@ namespace FourWalledCubicle.HEXClassifier
             if (recordType > 9 || recordType < 0 || recordType == 4)
                 yield break;
 
-            yield return new Tuple<SRECEntryTypes, SnapshotSpan>(
-                                SRECEntryTypes.BYTE_COUNT, new SnapshotSpan(line.Snapshot, line.Start + 2, 2));
+            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
+                                TokenEntryTypes.BYTE_COUNT, new SnapshotSpan(line.Snapshot, line.Start + 2, 2));
 
             int addressBytes = 0;
             switch (recordType)
@@ -83,8 +72,8 @@ namespace FourWalledCubicle.HEXClassifier
             if (text.Length < 5 + addressBytes)
                 yield break;
 
-            yield return new Tuple<SRECEntryTypes, SnapshotSpan>(
-                                SRECEntryTypes.ADDRESS, new SnapshotSpan(line.Snapshot, line.Start + 4, addressBytes));
+            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
+                                TokenEntryTypes.ADDRESS, new SnapshotSpan(line.Snapshot, line.Start + 4, addressBytes));
 
             // Check if we expect data in this record
             if (new List<int> { 0, 1, 2, 3 }.Contains(recordType))
@@ -93,15 +82,15 @@ namespace FourWalledCubicle.HEXClassifier
                 if (text.Length < (5 + dataLength))
                     yield break;
 
-                yield return new Tuple<SRECEntryTypes, SnapshotSpan>(
-                                    SRECEntryTypes.DATA, new SnapshotSpan(line.Snapshot, line.Start + 4 + addressBytes, dataLength));
+                yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
+                                    TokenEntryTypes.DATA, new SnapshotSpan(line.Snapshot, line.Start + 4 + addressBytes, dataLength));
             }
 
             int calculatedChecksum = CalculateChecksum(text);
             int fileChecksum = -1;
             int.TryParse(text.Substring(text.Length - 2, 2), System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out fileChecksum);
-            
-            yield return new Tuple<SRECEntryTypes, SnapshotSpan>(
+
+            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
                                 (fileChecksum == calculatedChecksum) ? SRECEntryTypes.CHECKSUM : SRECEntryTypes.CHECKSUM_BAD,
                                 new SnapshotSpan(line.Snapshot, line.End - 2, 2));
         }

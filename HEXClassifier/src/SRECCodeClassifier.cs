@@ -7,14 +7,14 @@ namespace FourWalledCubicle.HEXClassifier
 {
     internal sealed class SRECCodeClassifier : IClassifier
     {
-        private static readonly Dictionary<SRECParser.SRECEntryTypes, string> mClassifierTypeNames = new Dictionary<SRECParser.SRECEntryTypes, string>() {
-            { SRECParser.SRECEntryTypes.START_CODE, "srec.startcode" },
-            { SRECParser.SRECEntryTypes.BYTE_COUNT, "srec.bytecount" },
-            { SRECParser.SRECEntryTypes.ADDRESS, "srec.address" },
-            { SRECParser.SRECEntryTypes.RECORD_TYPE, "srec.recordtype" },
-            { SRECParser.SRECEntryTypes.DATA, "srec.data" },
-            { SRECParser.SRECEntryTypes.CHECKSUM, "srec.checksum" },
-            { SRECParser.SRECEntryTypes.CHECKSUM_BAD, "srec.checksum.bad" },
+        private static readonly Dictionary<TokenEntryTypes, string> mClassifierTypeNames = new Dictionary<TokenEntryTypes, string>() {
+            { TokenEntryTypes.START_CODE, "srec.startcode" },
+            { TokenEntryTypes.BYTE_COUNT, "srec.bytecount" },
+            { TokenEntryTypes.ADDRESS, "srec.address" },
+            { TokenEntryTypes.RECORD_TYPE, "srec.recordtype" },
+            { TokenEntryTypes.DATA, "srec.data" },
+            { TokenEntryTypes.CHECKSUM, "srec.checksum" },
+            { TokenEntryTypes.CHECKSUM_BAD, "srec.checksum.bad" },
         };
 
         private readonly ITextBuffer mTextBuffer;
@@ -40,7 +40,7 @@ namespace FourWalledCubicle.HEXClassifier
 
             ITextSnapshotLine line = span.Start.GetContainingLine();
 
-            foreach (Tuple<SRECParser.SRECEntryTypes, SnapshotSpan> segment in SRECParser.Parse(line))
+            foreach (Tuple<TokenEntryTypes, SnapshotSpan> segment in SRECParser.Parse(line))
             {
                 IClassificationType classificationType = mClassificationTypeRegistry.GetClassificationType(mClassifierTypeNames[segment.Item1]);
                 classifications.Add(new ClassificationSpan(segment.Item2, classificationType));
