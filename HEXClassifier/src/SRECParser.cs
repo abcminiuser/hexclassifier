@@ -91,7 +91,7 @@ namespace FourWalledCubicle.HEXClassifier
             int.TryParse(text.Substring(text.Length - 2, 2), System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out fileChecksum);
 
             yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
-                                (fileChecksum == calculatedChecksum) ? SRECEntryTypes.CHECKSUM : SRECEntryTypes.CHECKSUM_BAD,
+                                (fileChecksum == calculatedChecksum) ? TokenEntryTypes.CHECKSUM : TokenEntryTypes.CHECKSUM_BAD,
                                 new SnapshotSpan(line.Snapshot, line.End - 2, 2));
         }
 
