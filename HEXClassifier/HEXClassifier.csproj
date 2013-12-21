@@ -138,7 +138,7 @@
     <Compile Include="src\HEX\HEXContentDefinition.cs" />
     <Compile Include="src\HEX\HEXParser.cs" />
     <Compile Include="src\Parser.cs" />
-    <Compile Include="src\SREC\SRECClassifierTypes.cs" />
+    <Compile Include="src\SREC\SRECClassifierType.cs" />
     <Compile Include="src\SREC\SRECCodeClassifierProvider.cs" />
     <Compile Include="src\SREC\SRECContentDefinition.cs" />
     <Compile Include="src\SREC\SRECParser.cs" />
