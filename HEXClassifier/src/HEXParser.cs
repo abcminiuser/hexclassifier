@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace FourWalledCubicle.HEXClassifier
 {
-    internal abstract class HEXParser
+    internal abstract class HEXParser : Parser
     {
         public static IEnumerable<Tuple<TokenEntryTypes, SnapshotSpan>> Parse(ITextSnapshotLine line)
         {

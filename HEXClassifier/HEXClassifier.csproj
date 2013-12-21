@@ -131,6 +131,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HEXClassifierPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\EntryTypes.cs" />
     <Compile Include="src\HEXClassifierType.cs" />
     <Compile Include="src\HEXCodeClassifier.cs" />
     <Compile Include="src\HEXCodeClassifierProvider.cs" />

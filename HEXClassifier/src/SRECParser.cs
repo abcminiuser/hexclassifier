@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.Text;
 
 namespace FourWalledCubicle.HEXClassifier
 {
-    internal abstract class SRECParser
+    internal abstract class SRECParser : Parser
     {
         public static IEnumerable<Tuple<TokenEntryTypes, SnapshotSpan>> Parse(ITextSnapshotLine line)
         {
