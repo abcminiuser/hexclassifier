@@ -133,15 +133,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\CodeClassifier.cs" />
     <Compile Include="src\EntryTypes.cs" />
-    <Compile Include="src\HEXClassifierType.cs" />
-    <Compile Include="src\HEXCodeClassifierProvider.cs" />
-    <Compile Include="src\HEXContentDefinition.cs" />
-    <Compile Include="src\HEXParser.cs" />
+    <Compile Include="src\HEX\HEXClassifierType.cs" />
+    <Compile Include="src\HEX\HEXCodeClassifierProvider.cs" />
+    <Compile Include="src\HEX\HEXContentDefinition.cs" />
+    <Compile Include="src\HEX\HEXParser.cs" />
     <Compile Include="src\Parser.cs" />
-    <Compile Include="src\SRECClassifierTypes.cs" />
-    <Compile Include="src\SRECCodeClassifierProvider.cs" />
-    <Compile Include="src\SRECContentDefinition.cs" />
-    <Compile Include="src\SRECParser.cs" />
+    <Compile Include="src\SREC\SRECClassifierTypes.cs" />
+    <Compile Include="src\SREC\SRECCodeClassifierProvider.cs" />
+    <Compile Include="src\SREC\SRECContentDefinition.cs" />
+    <Compile Include="src\SREC\SRECParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
