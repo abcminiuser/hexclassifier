@@ -8,7 +8,7 @@ namespace FourWalledCubicle.HEXClassifier
 {
     internal sealed class HEXParser : Parser
     {
-        public IEnumerable<Tuple<TokenEntryTypes, SnapshotSpan>> Parse(ITextSnapshotLine line)
+        public IEnumerable<SpanClassification> Parse(ITextSnapshotLine line)
         {
             string text = line.GetText();
 
@@ -18,8 +18,11 @@ namespace FourWalledCubicle.HEXClassifier
             if (text[0] != ':')
                 yield break;
 
-            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
-                                 TokenEntryTypes.START_CODE, new SnapshotSpan(line.Snapshot, line.Start, 1));
+            yield return new SpanClassification
+            {
+                Entry = TokenEntryTypes.START_CODE,
+                Span = new SnapshotSpan(line.Snapshot, line.Start, 1)
+            };
 
             if (text.Length < 3)
                 yield break;
@@ -28,25 +31,37 @@ namespace FourWalledCubicle.HEXClassifier
             if (int.TryParse(text.Substring(1, 2), System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out byteCount) == false)
                 yield break;
 
-            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
-                                 TokenEntryTypes.BYTE_COUNT, new SnapshotSpan(line.Snapshot, line.Start + 1, 2));
+            yield return new SpanClassification
+            {
+                Entry = TokenEntryTypes.BYTE_COUNT,
+                Span = new SnapshotSpan(line.Snapshot, line.Start + 1, 2)
+            };
 
             if (text.Length < 7)
                 yield break;
 
-            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
-                                 TokenEntryTypes.ADDRESS, new SnapshotSpan(line.Snapshot, line.Start + 3, 4));
+            yield return new SpanClassification 
+            {
+                Entry = TokenEntryTypes.ADDRESS,
+                Span = new SnapshotSpan(line.Snapshot, line.Start + 3, 4)
+            };
 
             if (text.Length < 9)
                 yield break;
 
-            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
-                                 TokenEntryTypes.RECORD_TYPE, new SnapshotSpan(line.Snapshot, line.Start + 7, 2));
+            yield return new SpanClassification
+            {
+                Entry = TokenEntryTypes.RECORD_TYPE,
+                Span = new SnapshotSpan(line.Snapshot, line.Start + 7, 2)
+            };
 
             byteCount = Math.Min(text.Length - 9, byteCount * 2);
 
-            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
-                                 TokenEntryTypes.DATA, new SnapshotSpan(line.Snapshot, line.Start + 9, byteCount));
+            yield return new SpanClassification
+            {
+                Entry = TokenEntryTypes.DATA,
+                Span = new SnapshotSpan(line.Snapshot, line.Start + 9, byteCount)
+            };
         
             if (text.Length < (11 + byteCount))
                 yield break;
@@ -55,9 +70,11 @@ namespace FourWalledCubicle.HEXClassifier
             int fileChecksum = -1;
             int.TryParse(text.Substring(text.Length - 2, 2), System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out fileChecksum);
 
-            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
-                                    (fileChecksum == calculatedChecksum) ? TokenEntryTypes.CHECKSUM : TokenEntryTypes.CHECKSUM_BAD,
-                                    new SnapshotSpan(line.Snapshot, line.Start + 9 + byteCount, 2));
+            yield return new SpanClassification
+            {
+                Entry = (fileChecksum == calculatedChecksum) ? TokenEntryTypes.CHECKSUM : TokenEntryTypes.CHECKSUM_BAD,
+                Span = new SnapshotSpan(line.Snapshot, line.Start + 9 + byteCount, 2)
+            };
         }
 
         private int CalculateChecksum(string textLine)
