@@ -6,9 +6,9 @@ using System.Globalization;
 
 namespace FourWalledCubicle.HEXClassifier
 {
-    internal abstract class HEXParser : Parser
+    internal sealed class HEXParser : Parser
     {
-        public static IEnumerable<Tuple<TokenEntryTypes, SnapshotSpan>> Parse(ITextSnapshotLine line)
+        public IEnumerable<Tuple<TokenEntryTypes, SnapshotSpan>> Parse(ITextSnapshotLine line)
         {
             string text = line.GetText();
 
@@ -60,7 +60,7 @@ namespace FourWalledCubicle.HEXClassifier
                                     new SnapshotSpan(line.Snapshot, line.Start + 9 + byteCount, 2));
         }
 
-        private static int CalculateChecksum(string textLine)
+        private int CalculateChecksum(string textLine)
         {
             string checksumText = textLine.Substring(1, textLine.Length - 3);
 
@@ -78,5 +78,24 @@ namespace FourWalledCubicle.HEXClassifier
 
             return (256 - (temp & 0xFF) ) & 0xFF;
         }
+
+        #region ClassifierTypeNames
+
+        private readonly Dictionary<TokenEntryTypes, string> mClassifierTypeNames = new Dictionary<TokenEntryTypes, string>() {
+            { TokenEntryTypes.START_CODE, "hex.startcode" },
+            { TokenEntryTypes.BYTE_COUNT, "hex.bytecount" },
+            { TokenEntryTypes.ADDRESS, "hex.address" },
+            { TokenEntryTypes.RECORD_TYPE, "hex.recordtype" },
+            { TokenEntryTypes.DATA, "hex.data" },
+            { TokenEntryTypes.CHECKSUM, "hex.checksum" },
+            { TokenEntryTypes.CHECKSUM_BAD, "hex.checksum.bad" },
+        };
+
+        public Dictionary<TokenEntryTypes, string> GetClassifierTypeNames()
+        {
+            return mClassifierTypeNames;
+        }
+
+        #endregion
     }
 }

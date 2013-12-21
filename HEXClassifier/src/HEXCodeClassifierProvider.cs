@@ -16,7 +16,7 @@ namespace FourWalledCubicle.HEXClassifier
         public IClassifier GetClassifier(ITextBuffer buffer)
         {
             Func<IClassifier> classifierFunc =
-                () => new HEXCodeClassifier(buffer, mClassificationRegistry) as IClassifier;
+                () => new CodeClassifier(buffer, mClassificationRegistry, new HEXParser()) as IClassifier;
             return buffer.Properties.GetOrCreateSingletonProperty<IClassifier>(classifierFunc);
         }
     }

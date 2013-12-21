@@ -5,9 +5,9 @@ using Microsoft.VisualStudio.Text;
 
 namespace FourWalledCubicle.HEXClassifier
 {
-    internal abstract class SRECParser : Parser
+    internal sealed class SRECParser : Parser
     {
-        public static IEnumerable<Tuple<TokenEntryTypes, SnapshotSpan>> Parse(ITextSnapshotLine line)
+        public IEnumerable<Tuple<TokenEntryTypes, SnapshotSpan>> Parse(ITextSnapshotLine line)
         {
             string text = line.GetText();
 
@@ -95,7 +95,7 @@ namespace FourWalledCubicle.HEXClassifier
                                 new SnapshotSpan(line.Snapshot, line.End - 2, 2));
         }
 
-        private static int CalculateChecksum(string textLine)
+        private int CalculateChecksum(string textLine)
         {
             string checksumText = textLine.Substring(2, textLine.Length - 4);
             if (checksumText.Length % 2 != 0)
@@ -112,5 +112,25 @@ namespace FourWalledCubicle.HEXClassifier
 
             return (~(temp & 0xFF)) & 0xFF;
         }
+
+        #region ClassifierTypeNames
+
+        public Dictionary<TokenEntryTypes, string> GetClassifierTypeNames()
+        {
+            return mClassifierTypeNames;
+        }
+
+        private readonly Dictionary<TokenEntryTypes, string> mClassifierTypeNames = new Dictionary<TokenEntryTypes, string>() {
+            { TokenEntryTypes.START_CODE, "srec.startcode" },
+            { TokenEntryTypes.BYTE_COUNT, "srec.bytecount" },
+            { TokenEntryTypes.ADDRESS, "srec.address" },
+            { TokenEntryTypes.RECORD_TYPE, "srec.recordtype" },
+            { TokenEntryTypes.DATA, "srec.data" },
+            { TokenEntryTypes.CHECKSUM, "srec.checksum" },
+            { TokenEntryTypes.CHECKSUM_BAD, "srec.checksum.bad" },
+        };
+
+        #endregion
+
     }
 }
