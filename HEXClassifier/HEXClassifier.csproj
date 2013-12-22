@@ -132,7 +132,6 @@
     <Compile Include="HEXClassifierPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\CodeClassifier.cs" />
-    <Compile Include="src\EntryTypes.cs" />
     <Compile Include="src\HEX\HEXClassifierType.cs" />
     <Compile Include="src\HEX\HEXCodeClassifierProvider.cs" />
     <Compile Include="src\HEX\HEXContentDefinition.cs" />

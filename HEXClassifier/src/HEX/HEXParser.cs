@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.Text;
 using System.Globalization;
+using Microsoft.VisualStudio.Text;
 
 namespace FourWalledCubicle.HEXClassifier
 {
