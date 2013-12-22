@@ -34,9 +34,14 @@ namespace FourWalledCubicle.HEXClassifier
 
             ITextSnapshotLine line = span.Start.GetContainingLine();
 
+            Dictionary<TokenEntryTypes, IClassificationType> classificationCache = new Dictionary<TokenEntryTypes,IClassificationType>();
+
             foreach (SpanClassification classification in mParser.Parse(line))
             {
-                IClassificationType classificationType = mClassificationTypeRegistry.GetClassificationType(mParser.GetClassifierTypeNames()[classification.Entry]);
+                if (classificationCache.ContainsKey(classification.Entry) == false)
+                    classificationCache[classification.Entry] = mClassificationTypeRegistry.GetClassificationType(mParser.GetClassifierTypeNames()[classification.Entry]);
+
+                IClassificationType classificationType = classificationCache[classification.Entry];
                 classifications.Add(new ClassificationSpan(classification.Span, classificationType));
             }
 
