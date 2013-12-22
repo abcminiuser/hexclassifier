@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.VisualStudio.Text;
 
@@ -7,7 +6,7 @@ namespace FourWalledCubicle.HEXClassifier
 {
     internal sealed class SRECParser : Parser
     {
-        public IEnumerable<Tuple<TokenEntryTypes, SnapshotSpan>> Parse(ITextSnapshotLine line)
+        public IEnumerable<SpanClassification> Parse(ITextSnapshotLine line)
         {
             string text = line.GetText();
 
@@ -17,8 +16,11 @@ namespace FourWalledCubicle.HEXClassifier
             if (text[0] != 'S')
                 yield break;
 
-            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
-                                 TokenEntryTypes.START_CODE, new SnapshotSpan(line.Snapshot, line.Start, 1));
+            yield return new SpanClassification
+            {
+                Entry = TokenEntryTypes.START_CODE,
+                Span = new SnapshotSpan(line.Snapshot, line.Start, 1)
+            };
 
             if (text.Length < 3)
                 yield break;
@@ -26,8 +28,12 @@ namespace FourWalledCubicle.HEXClassifier
             int recordType = 0;
             if (int.TryParse(text.Substring(1, 1), System.Globalization.NumberStyles.Integer, CultureInfo.CurrentCulture, out recordType) == false)
                 yield break;
-            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
-                                TokenEntryTypes.RECORD_TYPE, new SnapshotSpan(line.Snapshot, line.Start + 1, 1));
+
+            yield return new SpanClassification
+            {
+                Entry = TokenEntryTypes.RECORD_TYPE,
+                Span = new SnapshotSpan(line.Snapshot, line.Start + 1, 1)
+            };
 
             if (text.Length < 5)
                 yield break;
@@ -40,8 +46,11 @@ namespace FourWalledCubicle.HEXClassifier
             if (recordType > 9 || recordType < 0 || recordType == 4)
                 yield break;
 
-            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
-                                TokenEntryTypes.BYTE_COUNT, new SnapshotSpan(line.Snapshot, line.Start + 2, 2));
+            yield return new SpanClassification
+            {
+                Entry = TokenEntryTypes.BYTE_COUNT,
+                Span = new SnapshotSpan(line.Snapshot, line.Start + 2, 2)
+            };
 
             int addressBytes = 0;
             switch (recordType)
@@ -66,14 +75,18 @@ namespace FourWalledCubicle.HEXClassifier
             }
 
             int address = 0;
-            if (int.TryParse(text.Substring(4, addressBytes), System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out address) == false)
+            if (int.TryParse(
+                text.Substring(4, addressBytes), System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out address) == false)
                 yield break;
 
             if (text.Length < 5 + addressBytes)
                 yield break;
 
-            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
-                                TokenEntryTypes.ADDRESS, new SnapshotSpan(line.Snapshot, line.Start + 4, addressBytes));
+            yield return new SpanClassification
+            {
+                Entry = TokenEntryTypes.ADDRESS,
+                Span = new SnapshotSpan(line.Snapshot, line.Start + 4, addressBytes)
+            };
 
             // Check if we expect data in this record
             if (new List<int> { 0, 1, 2, 3 }.Contains(recordType))
@@ -82,17 +95,22 @@ namespace FourWalledCubicle.HEXClassifier
                 if (text.Length < (5 + dataLength))
                     yield break;
 
-                yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
-                                    TokenEntryTypes.DATA, new SnapshotSpan(line.Snapshot, line.Start + 4 + addressBytes, dataLength));
+                yield return new SpanClassification
+                {
+                    Entry = TokenEntryTypes.DATA,
+                    Span = new SnapshotSpan(line.Snapshot, line.Start + 4 + addressBytes, dataLength)
+                };
             }
 
             int calculatedChecksum = CalculateChecksum(text);
             int fileChecksum = -1;
             int.TryParse(text.Substring(text.Length - 2, 2), System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out fileChecksum);
 
-            yield return new Tuple<TokenEntryTypes, SnapshotSpan>(
-                                (fileChecksum == calculatedChecksum) ? TokenEntryTypes.CHECKSUM : TokenEntryTypes.CHECKSUM_BAD,
-                                new SnapshotSpan(line.Snapshot, line.End - 2, 2));
+            yield return new SpanClassification
+            {
+                Entry = (fileChecksum == calculatedChecksum) ? TokenEntryTypes.CHECKSUM : TokenEntryTypes.CHECKSUM_BAD,
+                Span = new SnapshotSpan(line.Snapshot, line.End - 2, 2)
+            };
         }
 
         private int CalculateChecksum(string textLine)
