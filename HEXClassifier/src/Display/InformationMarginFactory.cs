@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.Utilities;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 
-namespace FourWalledCubicle.HEXClassifier.src
+namespace FourWalledCubicle.HEXClassifier
 {
     [Export(typeof(IWpfTextViewMarginProvider))]
     [Name(HexViewport.MarginName)]

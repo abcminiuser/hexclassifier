@@ -9,10 +9,10 @@ using Microsoft.VisualStudio.Utilities;
 using Microsoft.VisualStudio.Text.Classification;
 using System.Windows;
 
-namespace FourWalledCubicle.HEXClassifier.src
+namespace FourWalledCubicle.HEXClassifier
 {
     [Name(HexViewport.MarginName)]
-    class HexViewport :IWpfTextViewMargin
+    class HexViewport : IWpfTextViewMargin
     {
         public const string MarginName = "Hex Information";
 
@@ -31,8 +31,12 @@ namespace FourWalledCubicle.HEXClassifier.src
             _editorFormatMap = factory.EditorFormatSerivce.GetEditorFormatMap(textView);
 
             _editorFormatMap.FormatMappingChanged += HandleFormatMappingChanged;
-            _textView.Closed += (sender, e) => _editorFormatMap.FormatMappingChanged -= HandleFormatMappingChanged;
+            _textView.Closed += (sender, e) => { _editorFormatMap.FormatMappingChanged -= HandleFormatMappingChanged; };
             textView.Options.OptionChanged += HandleOptionsChanged;
+
+            /* Test visual element */
+            _element = new RichTextBox();
+            _element.Width = 200;
         }
 
         private void ThrowIfDisposed()
@@ -45,7 +49,6 @@ namespace FourWalledCubicle.HEXClassifier.src
         {
             if (_isDisposed)
                 return;
-
         }
 
         private void HandleOptionsChanged(object sender, EditorOptionChangedEventArgs e)
@@ -56,7 +59,6 @@ namespace FourWalledCubicle.HEXClassifier.src
 
         #region IWpfTextViewMargin Members
 
-        // This overrides content of margin. Magic happens here!
         public FrameworkElement VisualElement
         {
             get
