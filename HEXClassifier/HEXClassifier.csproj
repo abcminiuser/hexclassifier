@@ -133,18 +133,18 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HEXClassifierPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\CodeClassifier.cs" />
-    <Compile Include="src\HEX\HEXClassifierType.cs" />
-    <Compile Include="src\HEX\HEXCodeClassifierProvider.cs" />
-    <Compile Include="src\HEX\HEXContentDefinition.cs" />
-    <Compile Include="src\HEX\HEXParser.cs" />
-    <Compile Include="src\Parser.cs" />
-    <Compile Include="src\SREC\SRECClassifierType.cs" />
-    <Compile Include="src\SREC\SRECCodeClassifierProvider.cs" />
-    <Compile Include="src\SREC\SRECContentDefinition.cs" />
-    <Compile Include="src\SREC\SRECParser.cs" />
-    <Compile Include="src\HexViewport.cs" />
-    <Compile Include="src\InformationMarginFactory.cs" />
+    <Compile Include="src\Highlighting\CodeClassifier.cs" />
+    <Compile Include="src\Highlighting\HEX\HEXClassifierType.cs" />
+    <Compile Include="src\Highlighting\HEX\HEXCodeClassifierProvider.cs" />
+    <Compile Include="src\Highlighting\HEX\HEXContentDefinition.cs" />
+    <Compile Include="src\Highlighting\HEX\HEXParser.cs" />
+    <Compile Include="src\Highlighting\Parser.cs" />
+    <Compile Include="src\Highlighting\SREC\SRECClassifierType.cs" />
+    <Compile Include="src\Highlighting\SREC\SRECCodeClassifierProvider.cs" />
+    <Compile Include="src\Highlighting\SREC\SRECContentDefinition.cs" />
+    <Compile Include="src\Highlighting\SREC\SRECParser.cs" />
+    <Compile Include="src\Display\HexViewport.cs" />
+    <Compile Include="src\Display\InformationMarginFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
