@@ -15,6 +15,7 @@ namespace FourWalledCubicle.HEXClassifier
     [Order(After = PredefinedMarginNames.Spacer, Before = PredefinedMarginNames.Outlining)]
     [MarginContainer(PredefinedMarginNames.LeftSelection)]
     [ContentType("hex")]
+    [ContentType("srec")]
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     internal sealed class InformationMarginFactory : IWpfTextViewMarginProvider
     {
