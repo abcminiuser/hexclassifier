@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using System.Globalization;
-using System.Windows.Shapes;
 
 namespace FourWalledCubicle.HEXClassifier
 {
@@ -20,7 +20,6 @@ namespace FourWalledCubicle.HEXClassifier
         private readonly IWpfTextView m_textView;
         private readonly IClassifierAggregatorService m_classificationAggregator;
         private readonly IClassificationFormatMap m_classificationFormatMap;
-        private readonly IEditorFormatMap m_editorFormatMap;
 
         private bool m_isDisposed = false;
 
@@ -29,7 +28,6 @@ namespace FourWalledCubicle.HEXClassifier
             m_textView = textView;
             m_classificationAggregator = classificationAggregator;
             m_classificationFormatMap = factory.ClassificationMapService.GetClassificationFormatMap(textView);
-            m_editorFormatMap = factory.EditorFormatSerivce.GetEditorFormatMap(textView);
 
             this.Width = 300;
             this.ClipToBounds = true;
