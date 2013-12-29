@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
+using System.Globalization;
 
 namespace FourWalledCubicle.HEXClassifier
 {
@@ -66,24 +67,34 @@ namespace FourWalledCubicle.HEXClassifier
                     for (int dataPair = 0; dataPair < lineData.Length; dataPair += 2)
                     {
                         string currDataHex = lineData.Substring(dataPair, 2);
-                        char currDataChar = (char)int.Parse(currDataHex, System.Globalization.NumberStyles.HexNumber);
 
+                        int currDataInt = 0;
+                        int.TryParse(currDataHex, System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out currDataInt);
+
+                        char currDataChar = (char)currDataInt;
                         lineDataASCII += Char.IsControl(currDataChar) ? '.' : currDataChar;
                     }
                 }
 
-                if (lineDataASCII != string.Empty)
+                TextBlock lineText = new TextBlock();
+                lineText.FontFamily = new FontFamily("Consolas");
+                lineText.FontSize = m_classificationFormatMap.DefaultTextProperties.FontRenderingEmSize;
+
+                if (lineDataASCII == string.Empty)
                 {
-                    TextBlock lineText = new TextBlock();
-                    lineText.FontFamily = new FontFamily("Consolas");
-                    lineText.FontSize = m_classificationFormatMap.DefaultTextProperties.FontRenderingEmSize;
+                    lineText.Foreground = new SolidColorBrush(Colors.DarkGray);
+                    lineText.Text = "No data for this line";
+                    lineText.FontStyle = FontStyles.Italic;
+                }
+                else
+                {
                     lineText.Foreground = new SolidColorBrush(Colors.Black);
                     lineText.Text = lineDataASCII;
+                }                    
 
-                    Canvas.SetLeft(lineText, 0);
-                    Canvas.SetTop(lineText, (currLine - startLine) * m_textView.LineHeight);
-                    m_canvasElement.Children.Add(lineText);
-                }
+                Canvas.SetLeft(lineText, 0);
+                Canvas.SetTop(lineText, (currLine - startLine) * m_textView.LineHeight);
+                m_canvasElement.Children.Add(lineText);
             }
         }
 
