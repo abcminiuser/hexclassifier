@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using Microsoft.VisualStudio.Text.Classification;
-using System.Windows;
 
 namespace FourWalledCubicle.HEXClassifier
 {
@@ -16,44 +14,69 @@ namespace FourWalledCubicle.HEXClassifier
     {
         public const string MarginName = "Hex Information";
 
-        private readonly IWpfTextView _textView;
-        private readonly IClassificationFormatMap _classificationFormatMap;
-        private readonly IEditorFormatMap _editorFormatMap;
-        private readonly FrameworkElement _element;
+        private readonly IWpfTextView m_textView;
+        private readonly IVerticalScrollBar m_scrollBar;
+        private readonly IClassificationFormatMap m_classificationFormatMap;
+        private readonly IEditorFormatMap m_editorFormatMap;
+        private readonly Canvas m_canvasElement;
 
-        private bool _isDisposed = false;
-
+        private bool m_isDisposed = false;
 
         public HexViewport(IWpfTextView textView, InformationMarginFactory factory)
         {
-            _textView = textView;
-            _classificationFormatMap = factory.ClassificationMapService.GetClassificationFormatMap(textView);
-            _editorFormatMap = factory.EditorFormatSerivce.GetEditorFormatMap(textView);
+            m_textView = textView;
+            m_classificationFormatMap = factory.ClassificationMapService.GetClassificationFormatMap(textView);
+            m_editorFormatMap = factory.EditorFormatSerivce.GetEditorFormatMap(textView);
 
-            _editorFormatMap.FormatMappingChanged += HandleFormatMappingChanged;
-            _textView.Closed += (sender, e) => { _editorFormatMap.FormatMappingChanged -= HandleFormatMappingChanged; };
+            m_editorFormatMap.FormatMappingChanged += HandleFormatMappingChanged;
+            m_textView.Closed += (sender, e) => { m_editorFormatMap.FormatMappingChanged -= HandleFormatMappingChanged; };
             textView.Options.OptionChanged += HandleOptionsChanged;
 
-            /* Test visual element */
-            _element = new RichTextBox();
-            _element.Width = 200;
+            m_canvasElement = new Canvas();
+            m_canvasElement.Width = 250;
+
+            RenderText();
+
+            m_textView.LayoutChanged += (s, e) => { RenderText(); };
+        }
+
+        private void RenderText()
+        {
+            int sl = m_textView.TextViewLines.FirstVisibleLine.Start.GetContainingLine().LineNumber;
+            int el = m_textView.TextViewLines.LastVisibleLine.End.GetContainingLine().LineNumber;
+
+            m_canvasElement.Children.Clear();
+
+            for (int i = sl; i < el; i++)
+            {
+                ITextSnapshotLine line = m_textView.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(i);
+
+                TextBlock lineText = new TextBlock();
+
+                lineText.Text = line.GetText();
+                lineText.Foreground = new SolidColorBrush(Colors.Black);
+
+                Canvas.SetLeft(lineText, 0);
+                Canvas.SetTop(lineText, (i - sl) * lineText.FontSize * lineText.FontFamily.LineSpacing + 2);
+                m_canvasElement.Children.Add(lineText);
+            }
         }
 
         private void ThrowIfDisposed()
         {
-            if (_isDisposed)
+            if (m_isDisposed)
                 throw new ObjectDisposedException(MarginName);
         }
 
         private void HandleFormatMappingChanged(object sender, FormatItemsEventArgs e)
         {
-            if (_isDisposed)
+            if (m_isDisposed)
                 return;
         }
 
         private void HandleOptionsChanged(object sender, EditorOptionChangedEventArgs e)
         {
-            if (!_isDisposed)
+            if (!m_isDisposed)
                 return;
         }
 
@@ -64,7 +87,7 @@ namespace FourWalledCubicle.HEXClassifier
             get
             {
                 ThrowIfDisposed();
-                return _element;
+                return m_canvasElement;
             }
         }
 
@@ -77,7 +100,7 @@ namespace FourWalledCubicle.HEXClassifier
             get
             {
                 ThrowIfDisposed();
-                return _element.ActualHeight;
+                return m_canvasElement.ActualHeight;
             }
         }
 
@@ -97,10 +120,10 @@ namespace FourWalledCubicle.HEXClassifier
 
         public void Dispose()
         {
-            if (!_isDisposed)
+            if (!m_isDisposed)
             {
                 GC.SuppressFinalize(this);
-                _isDisposed = true;
+                m_isDisposed = true;
             }
         }
         #endregion
