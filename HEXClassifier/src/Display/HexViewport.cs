@@ -13,7 +13,7 @@ using System.Windows.Shapes;
 namespace FourWalledCubicle.HEXClassifier
 {
     [Name(HexViewport.MarginName)]
-    class HexViewport : IWpfTextViewMargin
+    class HexViewport : Canvas, IWpfTextViewMargin
     {
         public const string MarginName = "Hex Information";
 
@@ -21,7 +21,6 @@ namespace FourWalledCubicle.HEXClassifier
         private readonly IClassifierAggregatorService m_classificationAggregator;
         private readonly IClassificationFormatMap m_classificationFormatMap;
         private readonly IEditorFormatMap m_editorFormatMap;
-        private readonly Canvas m_canvasElement;
 
         private bool m_isDisposed = false;
 
@@ -32,14 +31,8 @@ namespace FourWalledCubicle.HEXClassifier
             m_classificationFormatMap = factory.ClassificationMapService.GetClassificationFormatMap(textView);
             m_editorFormatMap = factory.EditorFormatSerivce.GetEditorFormatMap(textView);
 
-            m_editorFormatMap.FormatMappingChanged += HandleFormatMappingChanged;
-            m_textView.Closed += (sender, e) => { m_editorFormatMap.FormatMappingChanged -= HandleFormatMappingChanged; };
-            textView.Options.OptionChanged += HandleOptionsChanged;
-
-            m_canvasElement = new Canvas();
-            m_canvasElement.Width = 300;
-
-            RenderText();
+            this.Width = 300;
+            this.ClipToBounds = true;
 
             m_textView.LayoutChanged += (s, e) => { RenderText(); };
         }
@@ -48,8 +41,7 @@ namespace FourWalledCubicle.HEXClassifier
         {
             IClassifier classifier = m_classificationAggregator.GetClassifier(m_textView.TextBuffer);
 
-            m_canvasElement.Children.Clear();
-            m_canvasElement.ClipToBounds = true;
+            this.Children.Clear();
 
             int startLine = m_textView.TextViewLines.FirstVisibleLine.Start.GetContainingLine().LineNumber;
             int endLine = m_textView.TextViewLines.LastVisibleLine.End.GetContainingLine().LineNumber;
@@ -95,17 +87,17 @@ namespace FourWalledCubicle.HEXClassifier
 
                 Canvas.SetLeft(lineText, 0);
                 Canvas.SetTop(lineText, (currLine - startLine) * m_textView.LineHeight);
-                m_canvasElement.Children.Add(lineText);
+                this.Children.Add(lineText);
             }
 
             Line deliminator = new Line();
             deliminator.Stroke = Brushes.DarkGray;
             deliminator.StrokeThickness = 1;
-            deliminator.X1 = m_canvasElement.Width - 1;
+            deliminator.X1 = this.Width - 1;
             deliminator.Y1 = 0;
             deliminator.X2 = deliminator.X1;
             deliminator.Y2 = m_textView.ViewportHeight;
-            m_canvasElement.Children.Add(deliminator);
+            this.Children.Add(deliminator);
         }
 
         private void ThrowIfDisposed()
@@ -114,39 +106,21 @@ namespace FourWalledCubicle.HEXClassifier
                 throw new ObjectDisposedException(MarginName);
         }
 
-        private void HandleFormatMappingChanged(object sender, FormatItemsEventArgs e)
-        {
-            if (m_isDisposed)
-                return;
-        }
-
-        private void HandleOptionsChanged(object sender, EditorOptionChangedEventArgs e)
-        {
-            if (!m_isDisposed)
-                return;
-        }
-
-        #region IWpfTextViewMargin Members
-
         public FrameworkElement VisualElement
         {
             get
             {
                 ThrowIfDisposed();
-                return m_canvasElement;
+                return this;
             }
         }
-
-        #endregion
-
-        #region ITextViewMargin Members
 
         public double MarginSize
         {
             get
             {
                 ThrowIfDisposed();
-                return m_canvasElement.ActualHeight;
+                return this.ActualHeight;
             }
         }
 
@@ -172,6 +146,5 @@ namespace FourWalledCubicle.HEXClassifier
                 m_isDisposed = true;
             }
         }
-        #endregion
     }
 }
