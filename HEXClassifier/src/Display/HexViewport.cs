@@ -54,7 +54,7 @@ namespace FourWalledCubicle.HEXClassifier
             {
                 ITextSnapshotLine line = m_textView.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(i);
 
-                String lineDataASCII = String.Empty;
+                string lineDataASCII = string.Empty;
 
                 IList<ClassificationSpan> lineClassifications = classifier.GetClassificationSpans(line.Extent);
                 foreach (ClassificationSpan c in lineClassifications)
@@ -72,15 +72,18 @@ namespace FourWalledCubicle.HEXClassifier
                     }
                 }
 
-                TextBlock lineText = new TextBlock();
-                lineText.FontFamily = new FontFamily("Courier New");
-                lineText.FontSize = m_textView.LineHeight - 2;
-                lineText.Foreground = new SolidColorBrush(Colors.Black);
-                lineText.Text += lineDataASCII;
+                if (lineDataASCII != string.Empty)
+                {
+                    TextBlock lineText = new TextBlock();
+                    lineText.FontFamily = new FontFamily("Consolas");
+                    lineText.FontSize = m_classificationFormatMap.DefaultTextProperties.FontRenderingEmSize;
+                    lineText.Foreground = new SolidColorBrush(Colors.Black);
+                    lineText.Text += lineDataASCII;
 
-                Canvas.SetLeft(lineText, 0);
-                Canvas.SetTop(lineText, (i - sl) * m_textView.LineHeight);
-                m_canvasElement.Children.Add(lineText);
+                    Canvas.SetLeft(lineText, 0);
+                    Canvas.SetTop(lineText, (i - sl) * m_textView.LineHeight);
+                    m_canvasElement.Children.Add(lineText);
+                }
             }
         }
 
