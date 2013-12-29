@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 using System.Globalization;
+using System.Windows.Shapes;
 
 namespace FourWalledCubicle.HEXClassifier
 {
@@ -36,7 +37,7 @@ namespace FourWalledCubicle.HEXClassifier
             textView.Options.OptionChanged += HandleOptionsChanged;
 
             m_canvasElement = new Canvas();
-            m_canvasElement.Width = 200;
+            m_canvasElement.Width = 300;
 
             RenderText();
 
@@ -48,6 +49,7 @@ namespace FourWalledCubicle.HEXClassifier
             IClassifier classifier = m_classificationAggregator.GetClassifier(m_textView.TextBuffer);
 
             m_canvasElement.Children.Clear();
+            m_canvasElement.ClipToBounds = true;
 
             int startLine = m_textView.TextViewLines.FirstVisibleLine.Start.GetContainingLine().LineNumber;
             int endLine = m_textView.TextViewLines.LastVisibleLine.End.GetContainingLine().LineNumber;
@@ -72,23 +74,22 @@ namespace FourWalledCubicle.HEXClassifier
                         int.TryParse(currDataHex, System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out currDataInt);
 
                         char currDataChar = (char)currDataInt;
-                        lineDataASCII += Char.IsControl(currDataChar) ? '.' : currDataChar;
+                        lineDataASCII += string.Format(" {0}", Char.IsControl(currDataChar) ? '.' : currDataChar);
                     }
                 }
 
                 TextBlock lineText = new TextBlock();
-                lineText.FontFamily = new FontFamily("Consolas");
+                lineText.FontFamily = m_classificationFormatMap.DefaultTextProperties.Typeface.FontFamily;
                 lineText.FontSize = m_classificationFormatMap.DefaultTextProperties.FontRenderingEmSize;
-
                 if (lineDataASCII == string.Empty)
                 {
-                    lineText.Foreground = new SolidColorBrush(Colors.DarkGray);
+                    lineText.Foreground = Brushes.DarkGray;
                     lineText.Text = "No data for this line";
                     lineText.FontStyle = FontStyles.Italic;
                 }
                 else
                 {
-                    lineText.Foreground = new SolidColorBrush(Colors.Black);
+                    lineText.Foreground = Brushes.Black;
                     lineText.Text = lineDataASCII;
                 }                    
 
@@ -96,6 +97,15 @@ namespace FourWalledCubicle.HEXClassifier
                 Canvas.SetTop(lineText, (currLine - startLine) * m_textView.LineHeight);
                 m_canvasElement.Children.Add(lineText);
             }
+
+            Line deliminator = new Line();
+            deliminator.Stroke = Brushes.DarkGray;
+            deliminator.StrokeThickness = 1;
+            deliminator.X1 = m_canvasElement.Width - 1;
+            deliminator.Y1 = 0;
+            deliminator.X2 = deliminator.X1;
+            deliminator.Y2 = m_textView.ViewportHeight;
+            m_canvasElement.Children.Add(deliminator);
         }
 
         private void ThrowIfDisposed()
