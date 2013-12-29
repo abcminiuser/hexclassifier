@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -6,8 +7,6 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FourWalledCubicle.HEXClassifier
 {
@@ -17,7 +16,6 @@ namespace FourWalledCubicle.HEXClassifier
         public const string MarginName = "Hex Information";
 
         private readonly IWpfTextView m_textView;
-        private readonly IVerticalScrollBar m_scrollBar;
         private readonly IClassifierAggregatorService m_classificationAggregator;
         private readonly IClassificationFormatMap m_classificationFormatMap;
         private readonly IEditorFormatMap m_editorFormatMap;
