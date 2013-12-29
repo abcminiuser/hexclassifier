@@ -48,11 +48,11 @@ namespace FourWalledCubicle.HEXClassifier
 
             m_canvasElement.Children.Clear();
 
-            int sl = m_textView.TextViewLines.FirstVisibleLine.Start.GetContainingLine().LineNumber;
-            int el = m_textView.TextViewLines.LastVisibleLine.End.GetContainingLine().LineNumber;
-            for (int i = sl; i < el; i++)
+            int startLine = m_textView.TextViewLines.FirstVisibleLine.Start.GetContainingLine().LineNumber;
+            int endLine = m_textView.TextViewLines.LastVisibleLine.End.GetContainingLine().LineNumber;
+            for (int currLine = startLine; currLine < endLine; currLine++)
             {
-                ITextSnapshotLine line = m_textView.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(i);
+                ITextSnapshotLine line = m_textView.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(currLine);
 
                 string lineDataASCII = string.Empty;
 
@@ -81,7 +81,7 @@ namespace FourWalledCubicle.HEXClassifier
                     lineText.Text = lineDataASCII;
 
                     Canvas.SetLeft(lineText, 0);
-                    Canvas.SetTop(lineText, (i - sl) * m_textView.LineHeight);
+                    Canvas.SetTop(lineText, (currLine - startLine) * m_textView.LineHeight);
                     m_canvasElement.Children.Add(lineText);
                 }
             }
