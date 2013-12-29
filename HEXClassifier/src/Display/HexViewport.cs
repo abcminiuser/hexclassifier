@@ -78,7 +78,7 @@ namespace FourWalledCubicle.HEXClassifier
                     lineText.FontFamily = new FontFamily("Consolas");
                     lineText.FontSize = m_classificationFormatMap.DefaultTextProperties.FontRenderingEmSize;
                     lineText.Foreground = new SolidColorBrush(Colors.Black);
-                    lineText.Text += lineDataASCII;
+                    lineText.Text = lineDataASCII;
 
                     Canvas.SetLeft(lineText, 0);
                     Canvas.SetTop(lineText, (i - sl) * m_textView.LineHeight);
