@@ -6,6 +6,8 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FourWalledCubicle.HEXClassifier
 {
@@ -16,15 +18,17 @@ namespace FourWalledCubicle.HEXClassifier
 
         private readonly IWpfTextView m_textView;
         private readonly IVerticalScrollBar m_scrollBar;
+        private readonly IClassifierAggregatorService m_classificationAggregator;
         private readonly IClassificationFormatMap m_classificationFormatMap;
         private readonly IEditorFormatMap m_editorFormatMap;
         private readonly Canvas m_canvasElement;
 
         private bool m_isDisposed = false;
 
-        public HexViewport(IWpfTextView textView, InformationMarginFactory factory)
+        public HexViewport(IWpfTextView textView, InformationMarginFactory factory, IClassifierAggregatorService classificationAggregator)
         {
             m_textView = textView;
+            m_classificationAggregator = classificationAggregator;
             m_classificationFormatMap = factory.ClassificationMapService.GetClassificationFormatMap(textView);
             m_editorFormatMap = factory.EditorFormatSerivce.GetEditorFormatMap(textView);
 
@@ -33,7 +37,7 @@ namespace FourWalledCubicle.HEXClassifier
             textView.Options.OptionChanged += HandleOptionsChanged;
 
             m_canvasElement = new Canvas();
-            m_canvasElement.Width = 250;
+            m_canvasElement.Width = 200;
 
             RenderText();
 
@@ -42,22 +46,42 @@ namespace FourWalledCubicle.HEXClassifier
 
         private void RenderText()
         {
-            int sl = m_textView.TextViewLines.FirstVisibleLine.Start.GetContainingLine().LineNumber;
-            int el = m_textView.TextViewLines.LastVisibleLine.End.GetContainingLine().LineNumber;
+            IClassifier classifier = m_classificationAggregator.GetClassifier(m_textView.TextBuffer);
 
             m_canvasElement.Children.Clear();
 
+            int sl = m_textView.TextViewLines.FirstVisibleLine.Start.GetContainingLine().LineNumber;
+            int el = m_textView.TextViewLines.LastVisibleLine.End.GetContainingLine().LineNumber;
             for (int i = sl; i < el; i++)
             {
                 ITextSnapshotLine line = m_textView.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(i);
 
-                TextBlock lineText = new TextBlock();
+                String lineDataASCII = String.Empty;
 
-                lineText.Text = line.GetText();
+                IList<ClassificationSpan> lineClassifications = classifier.GetClassificationSpans(line.Extent);
+                foreach (ClassificationSpan c in lineClassifications)
+                {
+                    if ((c.ClassificationType.Classification != "hex.data") && (c.ClassificationType.Classification != "srec.data"))
+                        continue;
+
+                    string lineData = c.Span.GetText();
+                    for (int dataPair = 0; dataPair < lineData.Length; dataPair += 2)
+                    {
+                        string currDataHex = lineData.Substring(dataPair, 2);
+                        char currDataChar = (char)int.Parse(currDataHex, System.Globalization.NumberStyles.HexNumber);
+
+                        lineDataASCII += Char.IsControl(currDataChar) ? '.' : currDataChar;
+                    }
+                }
+
+                TextBlock lineText = new TextBlock();
+                lineText.FontFamily = new FontFamily("Courier New");
+                lineText.FontSize = m_textView.LineHeight - 2;
                 lineText.Foreground = new SolidColorBrush(Colors.Black);
+                lineText.Text += lineDataASCII;
 
                 Canvas.SetLeft(lineText, 0);
-                Canvas.SetTop(lineText, (i - sl) * lineText.FontSize * lineText.FontFamily.LineSpacing + 2);
+                Canvas.SetTop(lineText, (i - sl) * m_textView.LineHeight);
                 m_canvasElement.Children.Add(lineText);
             }
         }

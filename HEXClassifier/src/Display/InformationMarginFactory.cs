@@ -21,8 +21,11 @@ namespace FourWalledCubicle.HEXClassifier
     {
         public IWpfTextViewMargin CreateMargin(IWpfTextViewHost textViewHost, IWpfTextViewMargin containerMargin)
         {
-            return new HexViewport(textViewHost.TextView, this);
+            return new HexViewport(textViewHost.TextView, this, ClassifierAggregatorService);
         }
+
+        [Import]
+        internal IClassifierAggregatorService ClassifierAggregatorService { get; set; }
 
         [Import]
         internal ITextDocumentFactoryService TextDocumentFactoryService { get; private set; }
