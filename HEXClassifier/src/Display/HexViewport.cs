@@ -29,10 +29,11 @@ namespace FourWalledCubicle.HEXClassifier
             m_classifier = factory.ClassifierAggregatorService.GetClassifier(textView.TextBuffer);
             m_classificationFormatMap = factory.ClassificationMapService.GetClassificationFormatMap(textView);
 
-            this.Width = 300;
             this.ClipToBounds = true;
+            this.Width = m_textView.ViewportWidth / 2;
 
             m_textView.LayoutChanged += (s, e) => { RenderText(); };
+            m_textView.ViewportWidthChanged += (s, e) => { this.Width = m_textView.ViewportWidth / 2; };
         }
 
         private void RenderText()
