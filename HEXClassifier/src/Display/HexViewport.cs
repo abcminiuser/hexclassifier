@@ -18,15 +18,15 @@ namespace FourWalledCubicle.HEXClassifier
         public const string MarginName = "Hex Information";
 
         private readonly IWpfTextView m_textView;
-        private readonly IClassifierAggregatorService m_classificationAggregator;
+        private readonly IClassifier m_classifier;
         private readonly IClassificationFormatMap m_classificationFormatMap;
 
         private bool m_isDisposed = false;
 
-        public HexViewport(IWpfTextView textView, InformationMarginFactory factory, IClassifierAggregatorService classificationAggregator)
+        public HexViewport(IWpfTextView textView, InformationMarginFactory factory)
         {
             m_textView = textView;
-            m_classificationAggregator = classificationAggregator;
+            m_classifier = factory.ClassifierAggregatorService.GetClassifier(textView.TextBuffer);
             m_classificationFormatMap = factory.ClassificationMapService.GetClassificationFormatMap(textView);
 
             this.Width = 300;
@@ -37,8 +37,6 @@ namespace FourWalledCubicle.HEXClassifier
 
         private void RenderText()
         {
-            IClassifier classifier = m_classificationAggregator.GetClassifier(m_textView.TextBuffer);
-
             this.Children.Clear();
 
             int startLine = m_textView.TextViewLines.FirstVisibleLine.Start.GetContainingLine().LineNumber;
@@ -49,7 +47,7 @@ namespace FourWalledCubicle.HEXClassifier
 
                 string lineDataASCII = string.Empty;
 
-                IList<ClassificationSpan> lineClassifications = classifier.GetClassificationSpans(line.Extent);
+                IList<ClassificationSpan> lineClassifications = m_classifier.GetClassificationSpans(line.Extent);
                 foreach (ClassificationSpan c in lineClassifications)
                 {
                     if ((c.ClassificationType.Classification != "hex.data") && (c.ClassificationType.Classification != "srec.data"))
@@ -81,7 +79,7 @@ namespace FourWalledCubicle.HEXClassifier
                 {
                     lineText.Foreground = Brushes.Black;
                     lineText.Text = lineDataASCII;
-                }                    
+                }
 
                 Canvas.SetLeft(lineText, 0);
                 Canvas.SetTop(lineText, (currLine - startLine) * m_textView.LineHeight);
