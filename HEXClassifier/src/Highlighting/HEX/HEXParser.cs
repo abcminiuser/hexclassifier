@@ -97,7 +97,7 @@ namespace FourWalledCubicle.HEXClassifier
 
         #region ClassifierTypeNames
 
-        private readonly Dictionary<TokenEntryTypes, string> mClassifierTypeNames = new Dictionary<TokenEntryTypes, string>() {
+        private readonly Dictionary<TokenEntryTypes, string> _ClassifierTypeNames = new Dictionary<TokenEntryTypes, string>() {
             { TokenEntryTypes.START_CODE, HEXClassificationType.ClassificationNames.StartCode},
             { TokenEntryTypes.BYTE_COUNT, HEXClassificationType.ClassificationNames.ByteCount },
             { TokenEntryTypes.ADDRESS, HEXClassificationType.ClassificationNames.Address },
@@ -109,7 +109,7 @@ namespace FourWalledCubicle.HEXClassifier
 
         public Dictionary<TokenEntryTypes, string> GetClassifierTypeNames()
         {
-            return mClassifierTypeNames;
+            return _ClassifierTypeNames;
         }
 
         #endregion

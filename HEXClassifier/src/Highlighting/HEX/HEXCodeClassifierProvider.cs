@@ -11,12 +11,12 @@ namespace FourWalledCubicle.HEXClassifier
     internal class HEXClassifierProvider : IClassifierProvider
     {
         [Import]
-        internal IClassificationTypeRegistryService mClassificationRegistry { get; set; }
+        internal IClassificationTypeRegistryService ClassificationRegistry { get; set; }
 
         public IClassifier GetClassifier(ITextBuffer buffer)
         {
             Func<IClassifier> classifierFunc =
-                () => new CodeClassifier(buffer, mClassificationRegistry, new HEXParser()) as IClassifier;
+                () => new CodeClassifier(buffer, ClassificationRegistry, new HEXParser()) as IClassifier;
             return buffer.Properties.GetOrCreateSingletonProperty<IClassifier>(classifierFunc);
         }
     }

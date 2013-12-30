@@ -9,10 +9,10 @@ namespace FourWalledCubicle.HEXClassifier
 {
     internal sealed class CodeClassifier : IClassifier
     {
-        private readonly ITextBuffer mTextBuffer;
-        private readonly IClassificationTypeRegistryService mClassificationTypeRegistry;
-        private readonly List<ClassificationSpan> classifications = new List<ClassificationSpan>();
-        private readonly Parser mParser;
+        private readonly ITextBuffer _textBuffer;
+        private readonly IClassificationTypeRegistryService _classificationTypeRegistry;
+        private readonly List<ClassificationSpan> _classifications = new List<ClassificationSpan>();
+        private readonly Parser _parser;
 
 #pragma warning disable 0067
         public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
@@ -20,32 +20,32 @@ namespace FourWalledCubicle.HEXClassifier
 
         public CodeClassifier(ITextBuffer buffer, IClassificationTypeRegistryService classifierTypeRegistry, Parser parser)
         {
-            mTextBuffer = buffer;
-            mClassificationTypeRegistry = classifierTypeRegistry;
-            mParser = parser;
+            _textBuffer = buffer;
+            _classificationTypeRegistry = classifierTypeRegistry;
+            _parser = parser;
         }
 
         public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)
         {
-            classifications.Clear();
+            _classifications.Clear();
 
             if (span.Length == 0)
-                return classifications;
+                return _classifications;
 
             ITextSnapshotLine line = span.Start.GetContainingLine();
 
             Dictionary<TokenEntryTypes, IClassificationType> classificationCache = new Dictionary<TokenEntryTypes,IClassificationType>();
 
-            foreach (SpanClassification classification in mParser.Parse(line))
+            foreach (SpanClassification classification in _parser.Parse(line))
             {
                 if (classificationCache.ContainsKey(classification.Entry) == false)
-                    classificationCache[classification.Entry] = mClassificationTypeRegistry.GetClassificationType(mParser.GetClassifierTypeNames()[classification.Entry]);
+                    classificationCache[classification.Entry] = _classificationTypeRegistry.GetClassificationType(_parser.GetClassifierTypeNames()[classification.Entry]);
 
                 IClassificationType classificationType = classificationCache[classification.Entry];
-                classifications.Add(new ClassificationSpan(classification.Span, classificationType));
+                _classifications.Add(new ClassificationSpan(classification.Span, classificationType));
             }
 
-            return classifications;
+            return _classifications;
         }
     }
 }

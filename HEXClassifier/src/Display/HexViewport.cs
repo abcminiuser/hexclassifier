@@ -18,44 +18,44 @@ namespace FourWalledCubicle.HEXClassifier
     {
         public const string MarginName = "Hex Information";
 
-        private readonly IWpfTextView m_textView;
-        private readonly IClassifier m_classifier;
-        private readonly IClassificationFormatMap m_classificationFormatMap;
+        private readonly IWpfTextView _textView;
+        private readonly IClassifier _classifier;
+        private readonly IClassificationFormatMap _classificationFormatMap;
 
-        private bool m_isDisposed = false;
+        private bool _isDisposed = false;
 
-        int? m_currentStartLine;
-        int? m_currentEndLine;
+        int? _currentStartLine;
+        int? _currentEndLine;
 
         public HexViewport(IWpfTextView textView, InformationMarginFactory factory)
         {
-            m_textView = textView;
-            m_classifier = factory.ClassifierAggregatorService.GetClassifier(textView.TextBuffer);
-            m_classificationFormatMap = factory.ClassificationMapService.GetClassificationFormatMap(textView);
+            _textView = textView;
+            _classifier = factory.ClassifierAggregatorService.GetClassifier(textView.TextBuffer);
+            _classificationFormatMap = factory.ClassificationMapService.GetClassificationFormatMap(textView);
 
             this.ClipToBounds = true;
 
             UpdateWidth();
 
-            m_textView.LayoutChanged += (s, e) => { UpdateDisplay(false); };
-            m_textView.TextBuffer.ChangedLowPriority += (s, e) => { UpdateDisplay(true); };
-            m_textView.ViewportWidthChanged += (s, e) => { UpdateWidth(); };
+            _textView.LayoutChanged += (s, e) => { UpdateDisplay(false); };
+            _textView.TextBuffer.ChangedLowPriority += (s, e) => { UpdateDisplay(true); };
+            _textView.ViewportWidthChanged += (s, e) => { UpdateWidth(); };
         }
 
         private void UpdateWidth()
         {
-            this.Width = m_textView.ViewportWidth / 2;
+            this.Width = _textView.ViewportWidth / 2;
         }
 
         private void UpdateDisplay(bool forcedUpdate)
         {
-            int startLine = m_textView.TextViewLines.FirstVisibleLine.Start.GetContainingLine().LineNumber;
-            int endLine = m_textView.TextViewLines.LastVisibleLine.End.GetContainingLine().LineNumber;
+            int startLine = _textView.TextViewLines.FirstVisibleLine.Start.GetContainingLine().LineNumber;
+            int endLine = _textView.TextViewLines.LastVisibleLine.End.GetContainingLine().LineNumber;
 
-            if (forcedUpdate || (m_currentStartLine != startLine) || (m_currentEndLine != endLine))
+            if (forcedUpdate || (_currentStartLine != startLine) || (_currentEndLine != endLine))
             {
-                m_currentStartLine = startLine;
-                m_currentEndLine = endLine;
+                _currentStartLine = startLine;
+                _currentEndLine = endLine;
 
                 this.Dispatcher.BeginInvoke(new Action(RenderText), DispatcherPriority.Render);
             }
@@ -63,7 +63,7 @@ namespace FourWalledCubicle.HEXClassifier
 
         private void RenderText()
         {
-            if (m_textView.IsClosed)
+            if (_textView.IsClosed)
                 return;
 
             this.Children.Clear();
@@ -74,16 +74,16 @@ namespace FourWalledCubicle.HEXClassifier
             deliminator.X1 = this.Width - 1;
             deliminator.Y1 = 0;
             deliminator.X2 = deliminator.X1;
-            deliminator.Y2 = m_textView.ViewportHeight;
+            deliminator.Y2 = _textView.ViewportHeight;
             this.Children.Add(deliminator);
 
-            for (int currLine = (int)m_currentStartLine; currLine < m_currentEndLine; currLine++)
+            for (int currLine = (int)_currentStartLine; currLine < _currentEndLine; currLine++)
             {
-                ITextSnapshotLine line = m_textView.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(currLine);
+                ITextSnapshotLine line = _textView.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(currLine);
 
                 string lineDataASCII = string.Empty;
 
-                IList<ClassificationSpan> lineClassifications = m_classifier.GetClassificationSpans(line.Extent);
+                IList<ClassificationSpan> lineClassifications = _classifier.GetClassificationSpans(line.Extent);
                 foreach (ClassificationSpan c in lineClassifications)
                 {
 
@@ -111,8 +111,8 @@ namespace FourWalledCubicle.HEXClassifier
                 }
 
                 TextBlock lineText = new TextBlock();
-                lineText.FontFamily = m_classificationFormatMap.DefaultTextProperties.Typeface.FontFamily;
-                lineText.FontSize = m_classificationFormatMap.DefaultTextProperties.FontRenderingEmSize;
+                lineText.FontFamily = _classificationFormatMap.DefaultTextProperties.Typeface.FontFamily;
+                lineText.FontSize = _classificationFormatMap.DefaultTextProperties.FontRenderingEmSize;
                 if (lineDataASCII == string.Empty)
                 {
                     lineText.Foreground = Brushes.DarkGray;
@@ -126,14 +126,14 @@ namespace FourWalledCubicle.HEXClassifier
                 }
 
                 Canvas.SetLeft(lineText, 0);
-                Canvas.SetTop(lineText, (currLine - (int)m_currentStartLine) * m_textView.LineHeight);
+                Canvas.SetTop(lineText, (currLine - (int)_currentStartLine) * _textView.LineHeight);
                 this.Children.Add(lineText);
             }
         }
 
         private void ThrowIfDisposed()
         {
-            if (m_isDisposed)
+            if (_isDisposed)
                 throw new ObjectDisposedException(MarginName);
         }
 
@@ -171,10 +171,10 @@ namespace FourWalledCubicle.HEXClassifier
 
         public void Dispose()
         {
-            if (!m_isDisposed)
+            if (!_isDisposed)
             {
                 GC.SuppressFinalize(this);
-                m_isDisposed = true;
+                _isDisposed = true;
             }
         }
     }

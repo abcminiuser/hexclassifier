@@ -8,16 +8,16 @@ namespace FourWalledCubicle.HEXClassifier
         [Export]
         [Name("hex")]
         [BaseDefinition("code")]
-        internal static ContentTypeDefinition hexContentTypeDefinition { get; set; }
+        internal static ContentTypeDefinition HEXContentTypeDefinition { get; set; }
         
         [Export]
         [ContentType("hex")]
         [FileExtension(".hex")]
-        internal static FileExtensionToContentTypeDefinition hexContentTypeDefinitionFileExtension { get; set; }
+        internal static FileExtensionToContentTypeDefinition HEXContentTypeDefinitionFileExtension { get; set; }
 
         [Export]
         [ContentType("hex")]
         [FileExtension(".eep")]
-        internal static FileExtensionToContentTypeDefinition hexEEPROMContentTypeDefinitionFileExtension { get; set; }    
+        internal static FileExtensionToContentTypeDefinition EEPROMContentTypeDefinitionFileExtension { get; set; }    
     }
 }

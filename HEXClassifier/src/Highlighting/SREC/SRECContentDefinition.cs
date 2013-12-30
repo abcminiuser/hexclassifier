@@ -8,11 +8,11 @@ namespace FourWalledCubicle.HEXClassifier
         [Export]
         [Name("srec")]
         [BaseDefinition("code")]
-        internal static ContentTypeDefinition srecContentTypeDefinition { get; set; }
+        internal static ContentTypeDefinition SRECContentTypeDefinition { get; set; }
 
         [Export]
         [ContentType("srec")]
         [FileExtension(".srec")]
-        internal static FileExtensionToContentTypeDefinition srecContentTypeDefinitionFileExtension { get; set; }
+        internal static FileExtensionToContentTypeDefinition SRECContentTypeDefinitionFileExtension { get; set; }
     }
 }

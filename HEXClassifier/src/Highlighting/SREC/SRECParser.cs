@@ -135,10 +135,10 @@ namespace FourWalledCubicle.HEXClassifier
 
         public Dictionary<TokenEntryTypes, string> GetClassifierTypeNames()
         {
-            return mClassifierTypeNames;
+            return _ClassifierTypeNames;
         }
 
-        private readonly Dictionary<TokenEntryTypes, string> mClassifierTypeNames = new Dictionary<TokenEntryTypes, string>() {
+        private readonly Dictionary<TokenEntryTypes, string> _ClassifierTypeNames = new Dictionary<TokenEntryTypes, string>() {
             { TokenEntryTypes.START_CODE, SRECClassificationType.ClassificationNames.StartCode},
             { TokenEntryTypes.BYTE_COUNT, SRECClassificationType.ClassificationNames.ByteCount },
             { TokenEntryTypes.ADDRESS, SRECClassificationType.ClassificationNames.Address },
