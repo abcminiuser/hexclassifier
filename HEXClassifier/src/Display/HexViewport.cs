@@ -38,6 +38,7 @@ namespace FourWalledCubicle.HEXClassifier
             UpdateWidth();
 
             _textView.LayoutChanged += (s, e) => { UpdateDisplay(false); };
+            _textView.ZoomLevelChanged += (s, e) => { UpdateDisplay(true); };
             _textView.TextBuffer.ChangedLowPriority += (s, e) => { UpdateDisplay(true); };
             _textView.ViewportWidthChanged += (s, e) => { UpdateWidth(); };
         }
