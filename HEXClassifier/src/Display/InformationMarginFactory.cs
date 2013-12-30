@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
@@ -24,12 +23,6 @@ namespace FourWalledCubicle.HEXClassifier
         internal IClassifierAggregatorService ClassifierAggregatorService { get; set; }
 
         [Import]
-        internal ITextDocumentFactoryService TextDocumentFactoryService { get; private set; }
-
-        [Import]
         internal IClassificationFormatMapService ClassificationMapService { get; private set; }
-
-        [Import]
-        internal IEditorFormatMapService EditorFormatSerivce { get; private set; }
     }
 }
