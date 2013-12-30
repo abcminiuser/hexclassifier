@@ -97,7 +97,7 @@ namespace FourWalledCubicle.HEXClassifier
 
         #region ClassifierTypeNames
 
-        private readonly Dictionary<TokenEntryTypes, string> _ClassifierTypeNames = new Dictionary<TokenEntryTypes, string>() {
+        private readonly Dictionary<TokenEntryTypes, string> _classifierTypeNames = new Dictionary<TokenEntryTypes, string>() {
             { TokenEntryTypes.START_CODE, HEXClassificationType.ClassificationNames.StartCode},
             { TokenEntryTypes.BYTE_COUNT, HEXClassificationType.ClassificationNames.ByteCount },
             { TokenEntryTypes.ADDRESS, HEXClassificationType.ClassificationNames.Address },
@@ -107,9 +107,12 @@ namespace FourWalledCubicle.HEXClassifier
             { TokenEntryTypes.CHECKSUM_BAD, HEXClassificationType.ClassificationNames.ChecksumFail },
         };
 
-        public Dictionary<TokenEntryTypes, string> GetClassifierTypeNames()
+        public Dictionary<TokenEntryTypes, string> ClassifierTypeNames
         {
-            return _ClassifierTypeNames;
+            get
+            {
+                return _classifierTypeNames;
+            }
         }
 
         #endregion

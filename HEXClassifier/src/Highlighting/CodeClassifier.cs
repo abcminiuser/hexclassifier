@@ -39,7 +39,7 @@ namespace FourWalledCubicle.HEXClassifier
             foreach (SpanClassification classification in _parser.Parse(line))
             {
                 if (classificationCache.ContainsKey(classification.Entry) == false)
-                    classificationCache[classification.Entry] = _classificationTypeRegistry.GetClassificationType(_parser.GetClassifierTypeNames()[classification.Entry]);
+                    classificationCache[classification.Entry] = _classificationTypeRegistry.GetClassificationType(_parser.ClassifierTypeNames[classification.Entry]);
 
                 IClassificationType classificationType = classificationCache[classification.Entry];
                 _classifications.Add(new ClassificationSpan(classification.Span, classificationType));

@@ -23,6 +23,7 @@ namespace FourWalledCubicle.HEXClassifier
     interface Parser
     {
         IEnumerable<SpanClassification> Parse(ITextSnapshotLine line);
-        Dictionary<TokenEntryTypes, string> GetClassifierTypeNames();
+
+        Dictionary<TokenEntryTypes, string> ClassifierTypeNames { get; }
     }
 }
