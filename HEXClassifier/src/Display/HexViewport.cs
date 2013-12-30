@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
+using System.Windows.Threading;
 
 namespace FourWalledCubicle.HEXClassifier
 {
@@ -32,12 +33,15 @@ namespace FourWalledCubicle.HEXClassifier
             this.ClipToBounds = true;
             this.Width = m_textView.ViewportWidth / 2;
 
-            m_textView.LayoutChanged += (s, e) => { RenderText(); };
+            m_textView.LayoutChanged += (s, e) => { this.Dispatcher.BeginInvoke(new Action(RenderText), DispatcherPriority.Render); };
             m_textView.ViewportWidthChanged += (s, e) => { this.Width = m_textView.ViewportWidth / 2; };
         }
 
         private void RenderText()
         {
+            if (m_textView.IsClosed)
+                return;
+
             this.Children.Clear();
 
             int startLine = m_textView.TextViewLines.FirstVisibleLine.Start.GetContainingLine().LineNumber;
