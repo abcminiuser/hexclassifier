@@ -5,11 +5,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using System.Windows.Threading;
 
 namespace FourWalledCubicle.HEXClassifier
 {
@@ -86,7 +86,6 @@ namespace FourWalledCubicle.HEXClassifier
                 IList<ClassificationSpan> lineClassifications = _classifier.GetClassificationSpans(line.Extent);
                 foreach (ClassificationSpan c in lineClassifications)
                 {
-
                     if ((c.ClassificationType.Classification != HEXClassificationType.ClassificationNames.Data) &&
                         (c.ClassificationType.Classification != SRECClassificationType.ClassificationNames.Data))
                     {
@@ -94,20 +93,7 @@ namespace FourWalledCubicle.HEXClassifier
                     }
 
                     string lineData = c.Span.GetText();
-                    for (int dataPair = 0; dataPair < lineData.Length; dataPair += 2)
-                    {
-                        try
-                        {
-                            string currDataHex = lineData.Substring(dataPair, 2);
-
-                            int currDataInt = 0;
-                            int.TryParse(currDataHex, System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out currDataInt);
-
-                            char currDataChar = (char)currDataInt;
-                            lineDataASCII += string.Format(" {0}", Char.IsControl(currDataChar) ? '.' : currDataChar);
-                        }
-                        catch { }
-                    }
+                    lineDataASCII += ConvertHEXToASCII(lineData);
                 }
 
                 TextBlock lineText = new TextBlock();
@@ -115,12 +101,13 @@ namespace FourWalledCubicle.HEXClassifier
                 lineText.FontSize = _classificationFormatMap.DefaultTextProperties.FontRenderingEmSize;
                 if (lineDataASCII == string.Empty)
                 {
+                    lineText.FontStyle = FontStyles.Italic;
                     lineText.Foreground = Brushes.DarkGray;
                     lineText.Text = "No data for this line";
-                    lineText.FontStyle = FontStyles.Italic;
                 }
                 else
                 {
+                    lineText.FontStyle = FontStyles.Normal;
                     lineText.Foreground = Brushes.Black;
                     lineText.Text = lineDataASCII;
                 }
@@ -129,6 +116,28 @@ namespace FourWalledCubicle.HEXClassifier
                 Canvas.SetTop(lineText, (currLine - (int)_currentStartLine) * _textView.LineHeight);
                 this.Children.Add(lineText);
             }
+        }
+
+        private string ConvertHEXToASCII(string hexValues)
+        {
+            string convertedString = string.Empty;
+
+            for (int dataPair = 0; dataPair < hexValues.Length; dataPair += 2)
+            {
+                try
+                {
+                    string currDataHex = hexValues.Substring(dataPair, 2);
+
+                    int currDataInt = 0;
+                    int.TryParse(currDataHex, System.Globalization.NumberStyles.HexNumber, CultureInfo.CurrentCulture, out currDataInt);
+
+                    char currDataChar = (char)currDataInt;
+                    convertedString += string.Format("{0} ", Char.IsControl(currDataChar) ? '.' : currDataChar);
+                }
+                catch { }
+            }
+
+            return convertedString;
         }
 
         private void ThrowIfDisposed()
