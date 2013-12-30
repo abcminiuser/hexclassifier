@@ -147,7 +147,7 @@ namespace FourWalledCubicle.HEXClassifier
             get
             {
                 ThrowIfDisposed();
-                return this.ActualHeight;
+                return this.Width;
             }
         }
 
