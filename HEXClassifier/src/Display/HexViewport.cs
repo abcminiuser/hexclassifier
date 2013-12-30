@@ -86,8 +86,12 @@ namespace FourWalledCubicle.HEXClassifier
                 IList<ClassificationSpan> lineClassifications = m_classifier.GetClassificationSpans(line.Extent);
                 foreach (ClassificationSpan c in lineClassifications)
                 {
-                    if ((c.ClassificationType.Classification != "hex.data") && (c.ClassificationType.Classification != "srec.data"))
+
+                    if ((c.ClassificationType.Classification != HEXClassificationType.ClassificationNames.Data) &&
+                        (c.ClassificationType.Classification != SRECClassificationType.ClassificationNames.Data))
+                    {
                         continue;
+                    }
 
                     string lineData = c.Span.GetText();
                     for (int dataPair = 0; dataPair < lineData.Length; dataPair += 2)

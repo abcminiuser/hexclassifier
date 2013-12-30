@@ -6,8 +6,8 @@ using Microsoft.VisualStudio.Utilities;
 namespace FourWalledCubicle.HEXClassifier
 {
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "hex.startcode")]
-    [Name("hex.startcode")]
+    [ClassificationType(ClassificationTypeNames = HEXClassificationType.ClassificationNames.StartCode)]
+    [Name(HEXClassificationType.ClassificationNames.StartCode)]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
     internal sealed class HEXStartCodeFormat : ClassificationFormatDefinition
@@ -20,8 +20,8 @@ namespace FourWalledCubicle.HEXClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "hex.bytecount")]
-    [Name("hex.bytecount")]
+    [ClassificationType(ClassificationTypeNames = HEXClassificationType.ClassificationNames.ByteCount)]
+    [Name(HEXClassificationType.ClassificationNames.ByteCount)]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
     internal sealed class HEXByteCountFormat : ClassificationFormatDefinition
@@ -34,8 +34,8 @@ namespace FourWalledCubicle.HEXClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "hex.address")]
-    [Name("hex.address")]
+    [ClassificationType(ClassificationTypeNames = HEXClassificationType.ClassificationNames.Address)]
+    [Name(HEXClassificationType.ClassificationNames.Address)]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
     internal sealed class HEXAddressFormat : ClassificationFormatDefinition
@@ -48,8 +48,8 @@ namespace FourWalledCubicle.HEXClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "hex.recordtype")]
-    [Name("hex.recordtype")]
+    [ClassificationType(ClassificationTypeNames = HEXClassificationType.ClassificationNames.RecordType)]
+    [Name(HEXClassificationType.ClassificationNames.RecordType)]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
     internal sealed class HEXRecordTypeFormat : ClassificationFormatDefinition
@@ -62,8 +62,8 @@ namespace FourWalledCubicle.HEXClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "hex.data")]
-    [Name("hex.data")]
+    [ClassificationType(ClassificationTypeNames = HEXClassificationType.ClassificationNames.Data)]
+    [Name(HEXClassificationType.ClassificationNames.Data)]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
     internal sealed class HEXDataFormat : ClassificationFormatDefinition
@@ -76,8 +76,8 @@ namespace FourWalledCubicle.HEXClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "hex.checksum")]
-    [Name("hex.checksum")]
+    [ClassificationType(ClassificationTypeNames = HEXClassificationType.ClassificationNames.ChecksumOK)]
+    [Name(HEXClassificationType.ClassificationNames.ChecksumOK)]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
     internal sealed class HEXChecksumFormat : ClassificationFormatDefinition
@@ -90,8 +90,8 @@ namespace FourWalledCubicle.HEXClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "hex.checksum.bad")]
-    [Name("hex.checksum.bad")]
+    [ClassificationType(ClassificationTypeNames = HEXClassificationType.ClassificationNames.ChecksumFail)]
+    [Name(HEXClassificationType.ClassificationNames.ChecksumFail)]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
     internal sealed class HEXBadChecksumFormat : ClassificationFormatDefinition
@@ -106,32 +106,43 @@ namespace FourWalledCubicle.HEXClassifier
 
     internal static class HEXClassificationType
     {
+        public static class ClassificationNames
+        {
+            public const string StartCode    = "hex.startcode";
+            public const string ByteCount    = "hex.bytecount";
+            public const string Address      = "hex.address";
+            public const string RecordType   = "hex.recordtype";
+            public const string Data         = "hex.data";
+            public const string ChecksumOK   = "hex.checksum";
+            public const string ChecksumFail = "hex.checksum.bad";
+        }
+
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("hex.startcode")]
+        [Name(HEXClassificationType.ClassificationNames.StartCode)]
         internal static ClassificationTypeDefinition HEXStartCodeDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("hex.bytecount")]
+        [Name(HEXClassificationType.ClassificationNames.ByteCount)]
         internal static ClassificationTypeDefinition HEXByteCountDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("hex.address")]
+        [Name(HEXClassificationType.ClassificationNames.Address)]
         internal static ClassificationTypeDefinition HEXAddressDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("hex.recordtype")]
+        [Name(HEXClassificationType.ClassificationNames.RecordType)]
         internal static ClassificationTypeDefinition HEXRecordTypeDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("hex.data")]
+        [Name(HEXClassificationType.ClassificationNames.Data)]
         internal static ClassificationTypeDefinition HEXDataDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("hex.checksum")]
+        [Name(HEXClassificationType.ClassificationNames.ChecksumOK)]
         internal static ClassificationTypeDefinition HEXChecksumDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("hex.checksum.bad")]
+        [Name(HEXClassificationType.ClassificationNames.ChecksumFail)]
         internal static ClassificationTypeDefinition HEXBadChecksumDefinition { get; set; }
     }
 }

@@ -6,8 +6,8 @@ using Microsoft.VisualStudio.Utilities;
 namespace FourWalledCubicle.HEXClassifier
 {
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "srec.startcode")]
-    [Name("srec.startcode")]
+    [ClassificationType(ClassificationTypeNames = SRECClassificationType.ClassificationNames.StartCode)]
+    [Name(SRECClassificationType.ClassificationNames.StartCode)]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
     internal sealed class SRECStartCodeFormat : ClassificationFormatDefinition
@@ -20,8 +20,8 @@ namespace FourWalledCubicle.HEXClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "srec.bytecount")]
-    [Name("srec.bytecount")]
+    [ClassificationType(ClassificationTypeNames = SRECClassificationType.ClassificationNames.ByteCount)]
+    [Name(SRECClassificationType.ClassificationNames.ByteCount)]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
     internal sealed class SRECByteCountFormat : ClassificationFormatDefinition
@@ -34,8 +34,8 @@ namespace FourWalledCubicle.HEXClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "srec.address")]
-    [Name("srec.address")]
+    [ClassificationType(ClassificationTypeNames = SRECClassificationType.ClassificationNames.Address)]
+    [Name(SRECClassificationType.ClassificationNames.Address)]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
     internal sealed class SRECAddressFormat : ClassificationFormatDefinition
@@ -48,8 +48,8 @@ namespace FourWalledCubicle.HEXClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "srec.recordtype")]
-    [Name("srec.recordtype")]
+    [ClassificationType(ClassificationTypeNames = SRECClassificationType.ClassificationNames.RecordType)]
+    [Name(SRECClassificationType.ClassificationNames.RecordType)]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
     internal sealed class SRECRecordTypeFormat : ClassificationFormatDefinition
@@ -62,8 +62,8 @@ namespace FourWalledCubicle.HEXClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "srec.data")]
-    [Name("srec.data")]
+    [ClassificationType(ClassificationTypeNames = SRECClassificationType.ClassificationNames.Data)]
+    [Name(SRECClassificationType.ClassificationNames.Data)]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
     internal sealed class SRECDataFormat : ClassificationFormatDefinition
@@ -76,8 +76,8 @@ namespace FourWalledCubicle.HEXClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "srec.checksum")]
-    [Name("srec.checksum")]
+    [ClassificationType(ClassificationTypeNames = SRECClassificationType.ClassificationNames.ChecksumOK)]
+    [Name(SRECClassificationType.ClassificationNames.ChecksumOK)]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
     internal sealed class SRECChecksumFormat : ClassificationFormatDefinition
@@ -90,8 +90,8 @@ namespace FourWalledCubicle.HEXClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "srec.checksum.bad")]
-    [Name("srec.checksum.bad")]
+    [ClassificationType(ClassificationTypeNames = SRECClassificationType.ClassificationNames.ChecksumFail)]
+    [Name(SRECClassificationType.ClassificationNames.ChecksumFail)]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
     internal sealed class SRECBadChecksumFormat : ClassificationFormatDefinition
@@ -106,32 +106,43 @@ namespace FourWalledCubicle.HEXClassifier
 
     internal static class SRECClassificationType
     {
+        public static class ClassificationNames
+        {
+            public const string StartCode = "srec.startcode";
+            public const string ByteCount = "srec.bytecount";
+            public const string Address = "srec.address";
+            public const string RecordType = "srec.recordtype";
+            public const string Data = "srec.data";
+            public const string ChecksumOK = "srec.checksum";
+            public const string ChecksumFail = "srec.checksum.bad";
+        }
+
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("srec.startcode")]
+        [Name(SRECClassificationType.ClassificationNames.StartCode)]
         internal static ClassificationTypeDefinition SRECStartCodeDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("srec.bytecount")]
+        [Name(SRECClassificationType.ClassificationNames.ByteCount)]
         internal static ClassificationTypeDefinition SRECByteCountDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("srec.address")]
+        [Name(SRECClassificationType.ClassificationNames.Address)]
         internal static ClassificationTypeDefinition SRECAddressDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("srec.recordtype")]
+        [Name(SRECClassificationType.ClassificationNames.RecordType)]
         internal static ClassificationTypeDefinition SRECRecordTypeDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("srec.data")]
+        [Name(SRECClassificationType.ClassificationNames.Data)]
         internal static ClassificationTypeDefinition SRECDataDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("srec.checksum")]
+        [Name(SRECClassificationType.ClassificationNames.ChecksumOK)]
         internal static ClassificationTypeDefinition SRECChecksumDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("srec.checksum.bad")]
+        [Name(SRECClassificationType.ClassificationNames.ChecksumFail)]
         internal static ClassificationTypeDefinition SRECBadChecksumDefinition { get; set; }
     }
 }
