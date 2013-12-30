@@ -13,8 +13,8 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace FourWalledCubicle.HEXClassifier
 {
-    [Name(HexViewport.MarginName)]
-    class HexViewport : Canvas, IWpfTextViewMargin
+    [Name(HEXMargin.MarginName)]
+    class HEXMargin : Canvas, IWpfTextViewMargin
     {
         public const string MarginName = "Hex Information";
 
@@ -27,7 +27,7 @@ namespace FourWalledCubicle.HEXClassifier
         int? _currentStartLine;
         int? _currentEndLine;
 
-        public HexViewport(IWpfTextView textView, InformationMarginFactory factory)
+        public HEXMargin(IWpfTextView textView, HEXMarginFactory factory)
         {
             _textView = textView;
             _classifier = factory.ClassifierAggregatorService.GetClassifier(textView.TextBuffer);
@@ -176,7 +176,7 @@ namespace FourWalledCubicle.HEXClassifier
 
         public ITextViewMargin GetTextViewMargin(string marginName)
         {
-            return (marginName == HexViewport.MarginName) ? (IWpfTextViewMargin)this : null;
+            return (marginName == HEXMargin.MarginName) ? (IWpfTextViewMargin)this : null;
         }
 
         public void Dispose()

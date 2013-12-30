@@ -143,8 +143,8 @@
     <Compile Include="src\Highlighting\SREC\SRECCodeClassifierProvider.cs" />
     <Compile Include="src\Highlighting\SREC\SRECContentDefinition.cs" />
     <Compile Include="src\Highlighting\SREC\SRECParser.cs" />
-    <Compile Include="src\Display\HexViewport.cs" />
-    <Compile Include="src\Display\InformationMarginFactory.cs" />
+    <Compile Include="src\Display\HEXMargin.cs" />
+    <Compile Include="src\Display\HEXMarginFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

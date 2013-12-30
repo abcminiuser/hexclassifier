@@ -6,17 +6,17 @@ using Microsoft.VisualStudio.Utilities;
 namespace FourWalledCubicle.HEXClassifier
 {
     [Export(typeof(IWpfTextViewMarginProvider))]
-    [Name(HexViewport.MarginName)]
+    [Name(HEXMargin.MarginName)]
     [Order(After = PredefinedMarginNames.Spacer, Before = PredefinedMarginNames.Outlining)]
     [MarginContainer(PredefinedMarginNames.LeftSelection)]
     [ContentType("hex")]
     [ContentType("srec")]
     [TextViewRole(PredefinedTextViewRoles.Editable)]
-    internal sealed class InformationMarginFactory : IWpfTextViewMarginProvider
+    internal sealed class HEXMarginFactory : IWpfTextViewMarginProvider
     {
         public IWpfTextViewMargin CreateMargin(IWpfTextViewHost textViewHost, IWpfTextViewMargin containerMargin)
         {
-            return new HexViewport(textViewHost.TextView, this);
+            return new HEXMargin(textViewHost.TextView, this);
         }
 
         [Import]
