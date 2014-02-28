@@ -3,8 +3,8 @@
   <Identifier Id="480b3145-39ad-48e1-b6f8-8cd13f6e4f72">
     <Name>HEXClassifier</Name>
     <Author>Dean Camera &amp; Morten Olsen</Author>
-    <Version>0.1</Version>
-    <Description xml:space="preserve">Provides syntax highlighting for Intel HEX and Motorolla SREC files.</Description>
+    <Version>0.2</Version>
+    <Description xml:space="preserve">Provides syntax highlighting for Intel HEX and Motorola SREC files.</Description>
     <Locale>1033</Locale>
     <MoreInfoUrl>http://www.fourwalledcubicle.com</MoreInfoUrl>
     <License>License.txt</License>
@@ -12,6 +12,7 @@
     <PreviewImage>Preview.png</PreviewImage>
     <InstalledByMsi>false</InstalledByMsi>
     <SupportedProducts>
+      <IsolatedShell Version="6.2">AtmelStudio</IsolatedShell>
       <IsolatedShell Version="6.1">AtmelStudio</IsolatedShell>
     </SupportedProducts>
     <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="4.0" />
